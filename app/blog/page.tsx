@@ -1,20 +1,9 @@
 "use client"; // Asegúrate de marcar el archivo como componente cliente
 
 import React, { useEffect, useState } from 'react'
-import { fetchPosts } from '../../sanity/lib/fetchPost'
 
 const Blog = () => {
   const [posts, setPosts] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function loadPosts() {
-      const postsData = await fetchPosts();
-      setPosts(postsData);
-    }
-
-    loadPosts();
-  }, []);
-
   return (
     <div>
       <h1>Welcome to the Blog</h1>
