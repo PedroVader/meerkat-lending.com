@@ -101,7 +101,7 @@ export default function PersonalLoansPage() {
                 <p className="text-gray-600 mb-8 text-center">
                   It only takes a few minutes to check your personalized rates
                 </p>
-                <MultiStepLoanForm />
+                <MultiStepLoanForm onClose={() => setShowMainForm(false)} />
               </div>
             </div>
           </section>
