@@ -44,7 +44,7 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
               </h1>
 
               <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Compare personalized offers from 50+ trusted lenders. No impact to your credit score.
+              Secure a Loan Today, Build a Better Tomorrow
               </p>
             </div>
 
