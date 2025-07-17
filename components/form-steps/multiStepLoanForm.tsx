@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ChevronLeft, ArrowRight, CheckCircle, X, Lock, Shield } from "lucide-react";
+import { submitToAirtable } from "@/lib/api/airtable";
 
 // Import form steps
 import LoanAmountStep from "./loanAmountStep";
@@ -21,6 +23,7 @@ import AccountTypeStep from "./accountTypeStep";
 import BankDetailsStep from "./bankDetailsStep";
 
 export default function MultistepLoanForm({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1
@@ -66,14 +69,28 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
 
   const totalSteps = 15;
 
+  // Función para determinar si el paso actual tiene inputs de texto
+  const hasTextInputs = (): boolean => {
+    const stepsWithTextInputs = [1, 4, 5, 6, 8, 9, 10, 11, 12, 15];
+    return stepsWithTextInputs.includes(currentStep);
+  };
+
+  // Función para determinar si el paso actual tiene solo opciones de selección
+  const hasOnlyOptions = (): boolean => {
+    const stepsWithOnlyOptions = [2, 3, 7, 13, 14];
+    return stepsWithOnlyOptions.includes(currentStep);
+  };
+
   // Manejador global de tecla Enter
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
+      // Solo manejar Enter si el paso tiene inputs de texto
+      if (event.key === 'Enter' && hasTextInputs()) {
         event.preventDefault(); // Prevenir submit del formulario
         
         // Si estamos en el último paso, hacer submit
         if (currentStep === totalSteps && isStepValid()) {
+          console.log('Enter pressed on last step - submitting form');
           handleSubmit();
         } 
         // Si no, avanzar al siguiente paso
@@ -159,6 +176,9 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     if (currentStep < totalSteps && isStepValid()) {
       console.log('Advancing to next step...');
       setCurrentStep(currentStep + 1);
+    } else if (currentStep === totalSteps && isStepValid()) {
+      console.log('Last step - submitting form...');
+      handleSubmit();
     }
   };
 
@@ -176,9 +196,21 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', formData);
-    onClose();
+  const handleSubmit = async () => {
+    try {
+      await submitToAirtable(formData);
+      console.log("Data sent to Airtable");
+      
+      // Redirigir a la página de procesamiento con parámetros
+      router.push(`/loan-processing?firstName=${encodeURIComponent(formData.firstName)}&amount=${encodeURIComponent(formData.loanAmount)}`);
+      
+      // Cerrar el formulario después de un breve delay
+      setTimeout(() => {
+        onClose();
+      }, 100);
+    } catch (error) {
+      alert("There was an error submitting your application.");
+    }
   };
 
   const renderCurrentStep = () => {
@@ -227,51 +259,55 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg w-full h-full flex flex-col">
+    <div className="rounded-xl w-full max-w-2xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center p-4 border-b border-gray-100">
+      <div className="flex justify-between items-center border-b pb-4 border-gray-100">
         <div className="flex items-center gap-3">
           <div>
             <h2 className="text-lg font-bold text-gray-800">Loan Application</h2>
             <p className="text-xs text-gray-500">Quick and secure process</p>
           </div>
         </div>
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-lg"
-        >
-          <X className="h-4 w-4" />
-        </button>
       </div>
-
+  
       {/* Progress */}
-      <div className="p-4 border-b border-gray-100">
+      <div className="border-b pb-4 border-gray-100">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-xs font-semibold text-gray-600">Step {currentStep} of {totalSteps}</span>
-          <span className="text-xs text-emerald-600 font-semibold">{Math.round((currentStep / totalSteps) * 100)}% Complete</span>
+          <span className="text-xs font-semibold text-gray-600">
+            Step {currentStep} of {totalSteps}
+          </span>
+          <span className="text-xs text-emerald-600 font-semibold">
+            {Math.round((currentStep / totalSteps) * 100)}% Complete
+          </span>
         </div>
         <Progress value={(currentStep / totalSteps) * 100} className="h-2 bg-gray-200" />
       </div>
-
+  
       {/* Content */}
-      <div className="flex-1 flex items-center justify-center p-4 overflow-y-auto">
+      <div>
         {renderCurrentStep()}
       </div>
-
-      {/* Navigation con indicación de Enter */}
-      <div className="p-4 border-t border-gray-100">
-        {/* Indicación visual de que se puede usar Enter */}
-        <div className="text-center text-sm text-gray-600">
+  
+      {/* Navigation con indicación de Enter condicional */}
+      {hasTextInputs() && (
+        <div className="border-t pt-4 border-gray-100 text-center text-sm text-gray-600">
           {currentStep < totalSteps ? (
             <>Press <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded font-semibold">Enter</kbd> to continue</>
           ) : (
             <>Press <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded font-semibold">Enter</kbd> to get your rates</>
           )}
         </div>
-      </div>
+      )}
 
+      {/* Mensaje para pasos con opciones */}
+      {hasOnlyOptions() && (
+        <div className="border-t pt-4 border-gray-100 text-center text-sm text-gray-600">
+          Select an option to continue
+        </div>
+      )}
+  
       {/* Trust badges */}
-      <div className="px-4 pb-4 flex items-center justify-center gap-4 text-xs text-gray-500">
+      <div className="flex items-center justify-center gap-4 text-xs text-gray-500 border-t pt-4">
         <div className="flex items-center gap-1">
           <Lock className="h-3 w-3" />
           <span>SSL Secured</span>
@@ -287,4 +323,4 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
       </div>
     </div>
   );
-}
+}  

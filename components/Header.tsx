@@ -14,7 +14,7 @@ export default function Header({ showForm, setShowForm }: HeaderProps): React.JS
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div>
-              <span className="text-2xl font-bold text-gray-900">Meerkat Lending</span>
+              <a href="/"><span className="text-2xl font-bold text-gray-900">Meerkat Lending</span></a>
               <p className="text-xs text-gray-600">Your financial future starts here</p>
             </div>
           </div>

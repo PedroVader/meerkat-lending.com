@@ -33,7 +33,7 @@ export default function Footer(): React.JSX.Element {
           <div>
             <h4 className="font-semibold mb-4 text-emerald-400">Products</h4>
             <ul className="space-y-3 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Personal loans</a></li>
+              <li><a href="/personal-loans" className="hover:text-white transition-colors">Personal loans</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Debt consolidation</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Business loans</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Home improvement</a></li>

@@ -1,13 +1,30 @@
 import { Lock, Shield } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
 
 interface BankDetailsStepProps {
   formData: any;
   handleInputChange: (field: string, value: any) => void;
+  isStepValid: () => boolean;
+  handleNext: () => void;
 }
 
-export default function BankDetailsStep({ formData, handleInputChange }: BankDetailsStepProps) {
+export default function BankDetailsStep({ 
+  formData, 
+  handleInputChange, 
+  isStepValid,
+  handleNext 
+}: BankDetailsStepProps) {
+  // Auto-focus en el primer input al montar
+  useEffect(() => {
+    const routingInput = document.getElementById('routingNumber');
+    if (routingInput) {
+      routingInput.focus();
+    }
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -57,6 +74,17 @@ export default function BankDetailsStep({ formData, handleInputChange }: BankDet
         <p className="text-xs text-gray-600 text-center">
           Your routing number can be found on your bank statements or at the bottom of your checks
         </p>
+        
+        {/* Botón opcional para submit manual */}
+        <div className="text-center pt-4">
+          <Button
+            onClick={handleNext}
+            disabled={!isStepValid()}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Get Your Rates
+          </Button>
+        </div>
       </div>
     </div>
   );

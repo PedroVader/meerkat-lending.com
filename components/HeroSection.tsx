@@ -10,42 +10,46 @@ interface HeroSectionProps {
 
 export default function HeroSection({ showForm, setShowForm }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen">
+    <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 min-h-screen flex items-center">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 25% 25%, #10b981 1px, transparent 1px)', backgroundSize: '50px 50px'}}></div>
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'radial-gradient(circle at 25% 25%, #10b981 1px, transparent 1px)',
+            backgroundSize: '50px 50px',
+          }}
+        ></div>
       </div>
-      
-      <div className="container mx-auto px-4 py-8 lg:py-16">
-        {/* Top Content Area */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center bg-emerald-100 text-emerald-700 text-sm font-medium px-4 py-2 rounded-full mb-6">
-            <Star className="h-4 w-4 mr-1" />
-            4.9/5 rating based on 12,847 reviews
-          </div>
-          
-          <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 mb-6 leading-tight max-w-4xl mx-auto">
-            The loan you need,{" "}
-            <span className="text-emerald-600 relative">
-              within your reach
-              <svg className="absolute -bottom-3 left-0 w-full" height="12" viewBox="0 0 200 12">
-                <path d="M0 6 Q50 0 100 6 T200 6" stroke="#10b981" strokeWidth="4" fill="none" />
-              </svg>
-            </span>
-          </h1>
 
-          <p className="text-xl lg:text-2xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
-            Compare personalized offers from 50+ trusted lenders. No impact to your credit score.
-          </p>
-        </div>
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Column */}
+          <div className="space-y-8">
+            {/* Title + subtitle */}
+            <div className="text-center lg:text-left">
+              <div className="inline-flex items-center bg-emerald-100 text-emerald-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
+                <Star className="h-4 w-4 mr-1" />
+                4.9/5 rating based on 12,847 reviews
+              </div>
 
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
-          
-          {/* Left Column - Image Card */}
-          <div className="lg:col-span-1 order-2 lg:order-1">
-            <div className="relative bg-white rounded-3xl p-6 shadow-2xl">
-              {/* Image with creative border */}
+              <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight max-w-4xl mx-auto lg:mx-0 mb-4">
+                The loan you need,{" "}
+                <span className="text-emerald-600 relative">
+                  within your reach
+                  <svg className="absolute -bottom-3 left-0 w-full" height="12" viewBox="0 0 200 12">
+                    <path d="M0 6 Q50 0 100 6 T200 6" stroke="#10b981" strokeWidth="4" fill="none" />
+                  </svg>
+                </span>
+              </h1>
+
+              <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Compare personalized offers from 50+ trusted lenders. No impact to your credit score.
+              </p>
+            </div>
+
+            {/* Image card */}
+            <div className="relative bg-white rounded-3xl p-6 shadow-2xl max-w-xl mx-auto lg:mx-0">
               <div className="relative">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-xl ring-4 ring-emerald-100">
                   <img
@@ -54,14 +58,11 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
-                {/* Floating success badge */}
                 <div className="absolute -top-3 -right-3 bg-emerald-500 text-white rounded-full px-4 py-2 shadow-lg z-10">
                   <span className="text-sm font-bold">✓ Pre-Approved</span>
                 </div>
               </div>
-              
-              {/* Stats within the card */}
+
               <div className="grid grid-cols-2 gap-3 mt-6">
                 {[
                   { label: "Loan amounts", value: "$1K-100K" },
@@ -75,8 +76,7 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
                   </div>
                 ))}
               </div>
-              
-              {/* CTA Button in card */}
+
               {!showForm && (
                 <div className="mt-6">
                   <Button
@@ -92,21 +92,23 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
             </div>
           </div>
 
-          {/* Right Column - Form Area */}
-          <div className="lg:col-span-2 order-1 lg:order-2">
-            {showForm ? (
-              <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-4">
+          {/* Right Column - Form */}
+          <div className="relative flex justify-center">
+            {/* Progreso decorativo */}
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white rounded-full px-4 py-2 text-sm text-emerald-600 font-semibold z-10 border border-gray-100">
+              5% Complete
+            </div>
+
+            <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+              {showForm ? (
                 <MultistepLoanForm onClose={() => setShowForm(false)} />
-              </div>
-            ) : (
-              <div className="space-y-8">
-                {/* Large CTA Section */}
-                <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to get started?</h2>
-                  <p className="text-lg text-gray-600 mb-6">
+              ) : (
+                <div className="space-y-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Ready to get started?</h2>
+                  <p className="text-lg text-gray-600 mb-4">
                     Quick application, instant pre-approval, funds in your account within 24 hours.
                   </p>
-                  
+
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button
                       onClick={() => setShowForm(true)}
@@ -116,7 +118,7 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
                       Start Application
                       <Star className="ml-2 h-6 w-6 group-hover:rotate-12 transition-transform" />
                     </Button>
-                    
+
                     <Button
                       variant="outline"
                       size="lg"
@@ -125,25 +127,24 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
                       Talk to advisor
                     </Button>
                   </div>
+
+                  <div className="grid sm:grid-cols-3 gap-4 pt-4">
+                    <div className="bg-white rounded-2xl p-4 shadow text-center">
+                      <div className="text-2xl font-bold text-emerald-600 mb-1">2.3M+</div>
+                      <div className="text-xs text-gray-600">Loans funded</div>
+                    </div>
+                    <div className="bg-white rounded-2xl p-4 shadow text-center">
+                      <div className="text-2xl font-bold text-emerald-600 mb-1">A+</div>
+                      <div className="text-xs text-gray-600">BBB Rating</div>
+                    </div>
+                    <div className="bg-white rounded-2xl p-4 shadow text-center">
+                      <div className="text-2xl font-bold text-emerald-600 mb-1">24h</div>
+                      <div className="text-xs text-gray-600">Fast funding</div>
+                    </div>
+                  </div>
                 </div>
-                
-                {/* Trust indicators */}
-                <div className="grid sm:grid-cols-3 gap-4">
-                  <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div className="text-3xl font-bold text-emerald-600 mb-2">2.3M+</div>
-                    <div className="text-sm text-gray-600">Loans funded</div>
-                  </div>
-                  <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div className="text-3xl font-bold text-emerald-600 mb-2">A+</div>
-                    <div className="text-sm text-gray-600">BBB Rating</div>
-                  </div>
-                  <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div className="text-3xl font-bold text-emerald-600 mb-2">24h</div>
-                    <div className="text-sm text-gray-600">Fast funding</div>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
