@@ -178,8 +178,6 @@ export default function LoanProcessingPage() {
         <Card className="w-full max-w-2xl shadow-2xl border-0 overflow-hidden">
           {/* Success Banner */}
           <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 p-6 text-white text-center">
-            <Sparkles className="h-12 w-12 mx-auto mb-3 animate-pulse" />
-            <h1 className="text-3xl font-bold mb-2">Congratulations, {firstName}!</h1>
             <p className="text-emerald-100">Your application has been processed</p>
           </div>
 
@@ -204,10 +202,6 @@ export default function LoanProcessingPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-3">
                 Great News! Your Pre-Qualification Looks Strong
               </h2>
-              <p className="text-gray-600 mb-4">
-                Based on your information, you have a <span className="font-semibold text-emerald-600">{approvalPercentage}% chance</span> of 
-                being approved for a loan up to <span className="font-semibold">${loanAmount}</span>.
-              </p>
               <div className="bg-emerald-50 rounded-lg p-4 text-sm text-emerald-800">
                 <CheckCircle2 className="h-5 w-5 inline mr-2" />
                 We've matched you with {Math.floor(Math.random() * 4) + 3} lenders offering competitive rates
