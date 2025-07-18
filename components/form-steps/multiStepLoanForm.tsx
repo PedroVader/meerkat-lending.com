@@ -200,13 +200,26 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     try {
       await submitToAirtable(formData);
       console.log("Data sent to Airtable");
-      
-      // Guardar datos necesarios en localStorage
-      localStorage.setItem('loanApplicationData', JSON.stringify({
-        firstName: formData.firstName,
-        loanAmount: formData.loanAmount,
-        timestamp: Date.now()
-      }));
+ // Crear el objeto con los datos
+const dataToStore = {
+  firstName: formData.firstName,
+  loanAmount: formData.loanAmount,
+  timestamp: Date.now()
+}
+
+console.log("🚨 Revisar antes de enviar:");
+console.log("Loan Amount:", formData.loanAmount);
+console.log("typeof:", typeof formData.loanAmount);
+
+// Mostrar en consola
+console.log("📦 Datos guardados en localStorage:", dataToStore)
+
+// Guardar en localStorage
+const stored = localStorage.getItem('loanApplicationData')
+const parsed = stored ? JSON.parse(stored) : null
+
+const loanAmount = parsed?.loanAmount || ''
+
       
       // Redirigir a la página de procesamiento sin parámetros
       router.push('/loan-processing');

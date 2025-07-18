@@ -10,7 +10,7 @@ export default function ProcessSection(): React.JSX.Element {
             <Clock className="h-4 w-4 mr-2" />
             Average time to funding: 36 hours
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4" id="how-it-works">
             Here's exactly what happens next
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">

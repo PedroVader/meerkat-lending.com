@@ -105,11 +105,11 @@ export default function BlogPage() {
                   <p className="text-sm">Expert Articles</p>
                 </div>
                 <div className="text-center border-l border-emerald-400 pl-6">
-                  <p className="text-3xl font-bold text-white">2M+</p>
+                  <p className="text-3xl font-bold text-white">50k</p>
                   <p className="text-sm">Monthly Readers</p>
                 </div>
                 <div className="text-center border-l border-emerald-400 pl-6">
-                  <p className="text-3xl font-bold text-white">4.9★</p>
+                  <p className="text-3xl font-bold text-white">4.8★</p>
                   <p className="text-sm">Reader Rating</p>
                 </div>
               </div>

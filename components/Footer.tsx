@@ -44,21 +44,15 @@ export default function Footer(): React.JSX.Element {
           <div>
             <h4 className="font-semibold mb-4 text-emerald-400">Resources</h4>
             <ul className="space-y-3 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Help center</a></li>
               <li><a href="/blog" className="hover:text-white transition-colors">Financial blog</a></li> {/* Enlace al blog */}
-              <li><a href="#" className="hover:text-white transition-colors">Loan calculator</a></li>
               <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Glossary</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-4 text-emerald-400">Contact</h4>
+            <h4 className="font-semibold mb-4 text-emerald-400">Schedule</h4>
             <ul className="space-y-3 text-gray-400">
-              <li className="flex items-center space-x-2">
-                <MessageCircle className="h-4 w-4" />
-                <span>24/7 Live chat</span>
-              </li>
               <li className="text-sm">
                 Monday - Friday: 8am - 8pm EST<br />
                 Saturday - Sunday: 9am - 5pm EST
