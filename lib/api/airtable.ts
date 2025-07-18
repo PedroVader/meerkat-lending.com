@@ -1,27 +1,62 @@
-import axios from "axios";
+// lib/api/airtable.ts
 
-const AIRTABLE_TOKEN = process.env.NEXT_PUBLIC_AIRTABLE_TOKEN!;
-const AIRTABLE_BASE_ID = process.env.NEXT_PUBLIC_AIRTABLE_BASE_ID!;
-const AIRTABLE_TABLE_NAME = "Applications"; // o como se llame tu tabla
+const AIRTABLE_API_KEY = process.env.NEXT_PUBLIC_AIRTABLE_API_KEY || '';
+const AIRTABLE_BASE_ID = 'appmwFMIFckGpGfbQ'; // Tu Base ID
+const AIRTABLE_TABLE_NAME = 'Loan Applications'; // Nombre de tu tabla
 
-export const submitToAirtable = async (data: Record<string, any>) => {
+export async function submitToAirtable(formData: any) {
+  const airtableData = {
+    fields: {
+      'Loan Amount': formData.loanAmount,
+      'Loan Purpose': formData.loanPurpose,
+      'Loan Purpose Other': formData.loanPurposeOther || '',
+      'Credit Score': formData.creditScore,
+      'Email': formData.email,
+      'Phone Number': formData.phone,
+      'First Name': formData.firstName,
+      'Last Name': formData.lastName,
+      'Date of Birth': formData.dateOfBirth,
+      'Zip Code': formData.zipCode,
+      'Address': formData.address,
+      'Income Type': formData.incomeType,
+      'Monthly Income': formData.monthlyIncome,
+      'SSN': formData.ssn,
+      'Home Owner': formData.homeOwner,
+      'Driver License': formData.driverLicense,
+      'License State': formData.licenseState,
+      'Pay Frequency': formData.payFrequency,
+      'Next Pay Date': formData.nextPayDate,
+      'Employer Name': formData.employerName,
+      'Payment Method': formData.paymentMethod,
+      'Account Type': formData.accountType,
+      'Routing Number': formData.routingNumber,
+      'Account Number': formData.accountNumber
+    }
+  };
+
   try {
-    const res = await axios.post(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`,
+    const response = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`,
       {
-        fields: data,
-      },
-      {
+        method: 'POST',
         headers: {
-          Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-          "Content-Type": "application/json",
+          'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+          'Content-Type': 'application/json'
         },
+        body: JSON.stringify(airtableData)
       }
     );
 
-    return res.data;
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(`Airtable error: ${JSON.stringify(error)}`);
+    }
+
+    const result = await response.json();
+    console.log('Successfully submitted to Airtable:', result);
+    return result;
   } catch (error) {
-    console.error("Airtable error:", error);
+    console.error('Error submitting to Airtable:', error);
     throw error;
   }
-};
+}

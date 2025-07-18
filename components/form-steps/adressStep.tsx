@@ -8,36 +8,16 @@ interface AddressStepProps {
 
 export default function AddressStep({ formData, handleInputChange }: AddressStepProps) {
   return (
-    <div className="space-y-6 relative">
-      <style jsx>{`
-        /* Asegurar que los inputs sean clickeables */
-        input {
-          position: relative;
-          z-index: 1;
-        }
-        
-        /* Prevenir que otros elementos se superpongan */
-        .form-input {
-          position: relative;
-          z-index: 10;
-        }
-        
-        /* Estilo específico para el input de ZIP */
-        .zip-input {
-          text-align: center;
-          letter-spacing: 0.1em;
-        }
-      `}</style>
-
+    <div className="space-y-6">
       <div className="text-center">
-        <MapPin className="h-12 w-12 text-emerald-600 mx-auto mb-3" />
         <h3 className="text-2xl font-bold text-gray-800 mb-2">What's your address?</h3>
         <p className="text-gray-600">We need to verify your location</p>
       </div>
       
-      <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
-        <div className="form-input">
-          <label htmlFor="zipCode" className="text-base font-medium mb-2 block">
+      <div className="max-w-md mx-auto space-y-6">
+        {/* ZIP Code */}
+        <div className="space-y-2">
+          <label htmlFor="zipCode" className="text-base font-medium">
             ZIP Code
           </label>
           <input
@@ -52,16 +32,20 @@ export default function AddressStep({ formData, handleInputChange }: AddressStep
                 handleInputChange('zipCode', value);
               }
             }}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base zip-input"
+            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base text-center tracking-wider"
             maxLength={5}
             pattern="[0-9]*"
             inputMode="numeric"
             autoComplete="postal-code"
           />
+          <p className="text-xs text-gray-500">
+            5-digit US ZIP code
+          </p>
         </div>
         
-        <div className="form-input">
-          <label htmlFor="address" className="text-base font-medium mb-2 block">
+        {/* Street Address */}
+        <div className="space-y-2">
+          <label htmlFor="address" className="text-base font-medium">
             Street Address
           </label>
           <input
@@ -72,9 +56,12 @@ export default function AddressStep({ formData, handleInputChange }: AddressStep
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
               handleInputChange('address', e.target.value)
             }
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base"
+            className="w-full px-4 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-base"
             autoComplete="street-address"
           />
+          <p className="text-xs text-gray-500">
+            Include street number, name, and city
+          </p>
         </div>
       </div>
     </div>

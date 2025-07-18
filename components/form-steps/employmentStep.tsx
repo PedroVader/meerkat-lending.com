@@ -11,7 +11,6 @@ export default function EmploymentStep({ formData, handleInputChange }: Employme
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <Building className="h-12 w-12 text-emerald-600 mx-auto mb-3" />
         <h3 className="text-2xl font-bold text-gray-800 mb-2">Employment Information</h3>
         <p className="text-gray-600">We won't contact your employer</p>
       </div>

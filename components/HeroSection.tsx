@@ -94,11 +94,6 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
 
           {/* Right Column - Form */}
           <div className="relative flex justify-center">
-            {/* Progreso decorativo */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white rounded-full px-4 py-2 text-sm text-emerald-600 font-semibold z-10 border border-gray-100">
-              5% Complete
-            </div>
-
             <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
               {showForm ? (
                 <MultistepLoanForm onClose={() => setShowForm(false)} />

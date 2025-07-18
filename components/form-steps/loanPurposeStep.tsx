@@ -37,13 +37,13 @@ export default function LoanPurposeStep({
             key={option.value}
             onClick={() => handleOptionSelect('loanPurpose', option.value)}
             className={cn(
-              "group w-full px-10 py-6 text-lg font-semibold rounded-full transition-all duration-100 transform hover:scale-100 flex items-center justify-between",
+              "group w-full px-10 py-4 text-lg font-semibold rounded-full transition-all duration-100 transform hover:scale-100 flex items-center justify-between",
               formData.loanPurpose === option.value
                 ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/25"
                 : "bg-white hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 border-2 border-gray-200 hover:border-emerald-400 hover:shadow-emerald-500/10"
             )}
           >
-            <span className="flex-1 text-left">{option.label}</span>
+            <span className="flex-1 text-center">{option.label}</span>
           </button>
         ))}
       </div>

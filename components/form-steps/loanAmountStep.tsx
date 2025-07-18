@@ -14,7 +14,7 @@ export default function LoanAmountStep({ formData, handleOptionSelect }: LoanAmo
         <p className="text-lg text-gray-600">Select your loan amount</p>
       </div>
       
-      <div className="max-w-2xl mx-auto space-y-4">
+      <div className="max-w-xl mx-auto space-y-4">
         {[
           { value: 'up-to-500', label: 'Up to $500' },
           { value: '500-1000', label: '$500 - $1,000' },
@@ -27,7 +27,7 @@ export default function LoanAmountStep({ formData, handleOptionSelect }: LoanAmo
             key={option.value}
             onClick={() => handleOptionSelect('loanAmount', option.value)}
             className={cn(
-              "group w-full px-10 py-6 text-lg font-semibold rounded-full transition-all duration-100 transform hover:scale-100",
+              "group w-full px-8 py-4 text-lg font-semibold rounded-full transition-all duration-100 transform hover:scale-100",
               formData.loanAmount === option.value
                 ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/25"
                 : "bg-white hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 border-2 border-gray-200 hover:border-emerald-400 hover:shadow-emerald-500/10"

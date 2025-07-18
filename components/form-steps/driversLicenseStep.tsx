@@ -1,4 +1,3 @@
-import { CreditCard } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -20,24 +19,34 @@ export default function DriversLicenseStep({ formData, handleInputChange }: Driv
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <CreditCard className="h-12 w-12 text-emerald-600 mx-auto mb-3" />
         <h3 className="text-2xl font-bold text-gray-800 mb-2">Driver's License</h3>
         <p className="text-gray-600">Used to verify your identity and prevent fraud</p>
       </div>
-      <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
-        <div>
-          <Label htmlFor="driverLicense" className="text-base font-medium mb-2 block">License Number</Label>
+      
+      <div className="max-w-md mx-auto space-y-6">
+        {/* License Number */}
+        <div className="space-y-2">
+          <Label htmlFor="driverLicense" className="text-base font-medium">
+            License Number
+          </Label>
           <Input
             id="driverLicense"
             type="text"
-            placeholder="License Number"
+            placeholder="Enter your license number"
             value={formData.driverLicense}
             onChange={(e) => handleInputChange('driverLicense', e.target.value)}
             className="text-base p-4"
           />
+          <p className="text-xs text-gray-500">
+            As shown on your driver's license or state ID
+          </p>
         </div>
-        <div>
-          <Label className="text-base font-medium mb-2 block">License State</Label>
+        
+        {/* License State */}
+        <div className="space-y-2">
+          <Label className="text-base font-medium">
+            License State
+          </Label>
           <Select value={formData.licenseState} onValueChange={(value) => handleInputChange('licenseState', value)}>
             <SelectTrigger className="text-base p-4">
               <SelectValue placeholder="Select your state" />
@@ -50,6 +59,9 @@ export default function DriversLicenseStep({ formData, handleInputChange }: Driv
               ))}
             </SelectContent>
           </Select>
+          <p className="text-xs text-gray-500">
+            State that issued your license
+          </p>
         </div>
       </div>
     </div>

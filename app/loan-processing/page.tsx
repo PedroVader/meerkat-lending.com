@@ -275,13 +275,6 @@ export default function LoanProcessingPage() {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
-                onClick={() => router.push('/dashboard')}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
-              >
-                View Dashboard
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-              <Button 
                 onClick={() => router.push('/')}
                 variant="outline"
                 className="flex-1 border-gray-300"
