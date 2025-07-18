@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -25,16 +25,11 @@ import {
 
 export default function LoanProcessingPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
   const [isComplete, setIsComplete] = useState(false)
   const [approvalPercentage] = useState(Math.floor(Math.random() * (95 - 75 + 1)) + 75) // Random 75-95%
   
-  // Get user name from URL params or use default
-  const firstName = searchParams.get('firstName') || 'Valued Customer'
-  const loanAmount = searchParams.get('amount') || '25,000'
-
   const processingSteps = [
     { 
       text: "Securing your connection", 
