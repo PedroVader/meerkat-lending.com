@@ -16,12 +16,12 @@ export default function MonthlyIncomeStep({ formData, handleOptionSelect }: Mont
       
       <div className="max-w-md mx-auto space-y-3">
         {[
-          { value: '0-1500', label: '$0 - $1,500' },
-          { value: '1500-2500', label: '$1,500 - $2,500' },
-          { value: '2500-3500', label: '$2,500 - $3,500' },
-          { value: '3500-4500', label: '$3,500 - $4,500' },
-          { value: '4500-5500', label: '$4,500 - $5,500' },
-          { value: '5500+', label: '$5,500+' }
+          { value: '$0 - $1,500', label: '$0 - $1,500' },
+          { value: '$1,500 - $2,500', label: '$1,500 - $2,500' },
+          { value: '$2,500 - $3,500', label: '$2,500 - $3,500' },
+          { value: '$3,500 - $4,500', label: '$3,500 - $4,500' },
+          { value: '$4,500 - $5,500', label: '$4,500 - $5,500' },
+          { value: '$5,500+', label: '$5,500+' }
         ].map((option) => (
           <button
             key={option.value}

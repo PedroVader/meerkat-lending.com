@@ -1,5 +1,5 @@
-import { DollarSign } from "lucide-react";
-import { cn } from "@/lib/utils"; // Adjust the import path as necessary
+import { ArrowRight, DollarSign } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface LoanAmountStepProps {
   formData: any;
@@ -7,37 +7,60 @@ interface LoanAmountStepProps {
 }
 
 export default function LoanAmountStep({ formData, handleOptionSelect }: LoanAmountStepProps) {
+  const options = [
+    { value: "Up-To-500", label: "Up to $500" },
+    { value: "500-1000", label: "$500 to $1,000" },
+    { value: "1000-2500", label: "$1,000 to $2,500" },
+    { value: "2500-5000", label: "$2,500 to $5,000" },
+    { value: "5000+", label: "Above $5,000" }
+  ];
+
   return (
     <div className="space-y-8">
-      <div className="text-center">
-       <h3 className="text-3xl font-bold text-gray-800 mb-3">How much do you need?</h3>
-        <p className="text-lg text-gray-600">Select your loan amount</p>
+      <div className="text-center mt-5">
+        <h3 className="text-3xl font-bold text-gray-800 mb-1">How Much Do You Need?</h3>
       </div>
-      
-      <div className="max-w-xl mx-auto space-y-4">
-        {[
-          { value: 'up-to-500', label: 'Up to $500' },
-          { value: '500-1000', label: '$500 - $1,000' },
-          { value: '1000-2500', label: '$1,000 - $2,500' },
-          { value: '2500-5000', label: '$2,500 - $5,000' },
-          { value: '5000-10000', label: '$5,000 - $10,000' },
-          { value: '10000-plus', label: 'More than $10,000' }
-        ].map((option) => (
+
+      <div className="max-w-md mx-auto space-y-4">
+        {options.map((option) => (
           <button
             key={option.value}
-            onClick={() => handleOptionSelect('loanAmount', option.value)}
+            onClick={() => handleOptionSelect("loanAmount", option.value)}
             className={cn(
-              "group w-full px-8 py-4 text-lg font-semibold rounded-full transition-all duration-100 transform hover:scale-100",
+              "group w-full px-6 py-4 text-lg text-center rounded-full transition-all duration-150 flex items-center justify-between",
               formData.loanAmount === option.value
-                ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-emerald-500/25"
-                : "bg-white hover:bg-emerald-50 text-gray-800 hover:text-emerald-700 border-2 border-gray-200 hover:border-emerald-400 hover:shadow-emerald-500/10"
+                ? "bg-emerald-500 text-white shadow-md"
+                : "bg-white text-gray-800 border border-gray-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300"
             )}
           >
-            <span className="flex items-center justify-center">
-              {option.label}
-            </span>
+            <span>{option.label}</span>
+            <ArrowRight
+              className={cn(
+                "ml-2 h-5 w-5 transition-transform duration-150",
+                formData.loanAmount === option.value ? "text-white" : "text-gray-400 group-hover:translate-x-1"
+              )}
+            />
           </button>
         ))}
+      </div>
+
+      <div className="text-center text-sm text-gray-700 mt-8">
+        <p className="mb-2 font-medium">Join our community of happy customers!</p>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <img src="/avatars/avatar1.png" className="w-8 h-8 rounded-full" alt="user" />
+          <img src="/avatars/avatar2.png" className="w-8 h-8 rounded-full" alt="user" />
+          <img src="/avatars/avatar3.png" className="w-8 h-8 rounded-full" alt="user" />
+          <img src="/avatars/avatar4.png" className="w-8 h-8 rounded-full" alt="user" />
+          <span className="ml-1 font-semibold text-gray-600">1K</span>
+        </div>
+
+        <div className="inline-flex items-center gap-1 text-xs text-gray-500 border border-gray-200 px-3 py-1 rounded-full">
+          <svg className="h-3 w-3 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M12 11c0 .35-.06.687-.17 1a4 4 0 01-7.66-1c0-2.21 1.79-4 4-4 .657 0 1.27.158 1.81.438a4.006 4.006 0 012.02 3.562z" />
+            <path d="M12 21c-4.97 0-9-4.03-9-9S7.03 3 12 3s9 4.03 9 9c0 .861-.109 1.697-.315 2.488M15 21h6v-6" />
+          </svg>
+          256-bit SSL
+        </div>
       </div>
     </div>
   );

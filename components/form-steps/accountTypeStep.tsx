@@ -15,7 +15,7 @@ export default function AccountTypeStep({ formData, handleOptionSelect }: Accoun
       
       <div className="max-w-md mx-auto space-y-3">
         <button
-          onClick={() => handleOptionSelect('accountType', 'checking')}
+          onClick={() => handleOptionSelect('accountType', 'Checking')}
           className={cn(
             "w-full p-4 border-2 rounded-xl font-medium text-center transition-all duration-200",
             formData.accountType === 'checking'
@@ -27,7 +27,7 @@ export default function AccountTypeStep({ formData, handleOptionSelect }: Accoun
         </button>
         
         <button
-          onClick={() => handleOptionSelect('accountType', 'savings')}
+          onClick={() => handleOptionSelect('accountType', 'Savings')}
           className={cn(
             "w-full p-4 border-2 rounded-xl font-medium text-center transition-all duration-200",
             formData.accountType === 'savings'

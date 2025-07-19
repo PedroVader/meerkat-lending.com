@@ -420,20 +420,7 @@ export default function BlogPostPage() {
                   <div className="sticky top-8 space-y-8">
                     {/* Newsletter Signup */}
                     <Card className="bg-gradient-to-br from-emerald-600 to-emerald-700 text-white shadow-lg border-0">
-                      <CardContent className="p-6">
-                        <h4 className="font-bold mb-2">Get Weekly Tips</h4>
-                        <p className="text-emerald-100 text-sm mb-4">Join 50,000+ readers getting expert financial advice.</p>
-                        <div className="space-y-3">
-                          <input 
-                            type="email" 
-                            placeholder="Your email"
-                            className="w-full px-3 py-2 rounded text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-300"
-                          />
-                          <Button className="w-full bg-white text-emerald-600 hover:bg-gray-100 text-sm font-semibold">
-                            Subscribe Free
-                          </Button>
-                        </div>
-                      </CardContent>
+                      
                     </Card>
 
                     {/* Quick Calculator 

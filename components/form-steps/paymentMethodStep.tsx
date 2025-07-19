@@ -15,10 +15,10 @@ export default function PaymentMethodStep({ formData, handleOptionSelect }: Paym
       
       <div className="max-w-md mx-auto space-y-3">
         <button
-          onClick={() => handleOptionSelect('paymentMethod', 'direct-deposit')}
+          onClick={() => handleOptionSelect('paymentMethod', 'Direct Deposit')}
           className={cn(
             "w-full p-4 border-2 rounded-xl font-medium text-center transition-all duration-200",
-            formData.paymentMethod === 'direct-deposit'
+            formData.paymentMethod === 'Direct Deposit'
               ? "border-emerald-600 bg-emerald-50 text-emerald-700 shadow-md"
               : "border-gray-200 hover:border-emerald-400 hover:bg-emerald-50/50"
           )}
@@ -27,10 +27,10 @@ export default function PaymentMethodStep({ formData, handleOptionSelect }: Paym
         </button>
         
         <button
-          onClick={() => handleOptionSelect('paymentMethod', 'paper-check')}
+          onClick={() => handleOptionSelect('paymentMethod', 'Paper Check')}
           className={cn(
             "w-full p-4 border-2 rounded-xl font-medium text-center transition-all duration-200",
-            formData.paymentMethod === 'paper-check'
+            formData.paymentMethod === 'Paper Check'
               ? "border-emerald-600 bg-emerald-50 text-emerald-700 shadow-md"
               : "border-gray-200 hover:border-emerald-400 hover:bg-emerald-50/50"
           )}

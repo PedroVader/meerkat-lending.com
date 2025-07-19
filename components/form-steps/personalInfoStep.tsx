@@ -9,8 +9,7 @@ interface PersonalInfoStepProps {
 export default function PersonalInfoStep({ formData, handleInputChange }: PersonalInfoStepProps) {
   return (
     <div className="space-y-6">
-      <div className="text-center">
-        <User className="h-12 w-12 text-emerald-600 mx-auto mb-3" />
+      <div className="text-center mt-5">
         <h3 className="text-2xl font-bold text-gray-800 mb-2">Personal Information</h3>
         <p className="text-gray-600">Tell us about yourself</p>
       </div>

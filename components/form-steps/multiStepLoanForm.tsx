@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ChevronLeft, ArrowRight, CheckCircle, X, Lock, Shield } from "lucide-react";
+import { CheckCircle, X, Lock, Shield } from "lucide-react";
 import { submitToAirtable } from "@/lib/api/airtable";
 
 // Import form steps
@@ -21,63 +21,57 @@ import EmploymentStep from "./employmentStep";
 import PaymentMethodStep from "./paymentMethodStep";
 import AccountTypeStep from "./accountTypeStep";
 import BankDetailsStep from "./bankDetailsStep";
+import DateBirthStep from "./dateBirthStep";
+import CellPhoneNumberStep from "./cellPhoneNumberStep";
+import EmailAddressStep from "./emailAddressStep";
+import YourNameStep from "./yourNameStep";
+import SSNStep from "./ssnStep";
+import HomeOwnerStep from "./homeOwner";
+import NextPaydateStep from "./nextPaydateStep";
+import PaycheckMethodStep from "./paycheckMethodStep";
 
 export default function MultistepLoanForm({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    // Step 1
     loanAmount: '',
-    // Step 2
     loanPurpose: '',
     loanPurposeOther: '',
-    // Step 3
     creditScore: '',
-    // Step 4
     email: '',
     phone: '',
-    // Step 5
     firstName: '',
     lastName: '',
     dateOfBirth: undefined,
-    // Step 6
     zipCode: '',
     address: '',
-    // Step 7
     incomeType: '',
-    // Step 8
     monthlyIncome: '',
-    // Step 9
     ssn: '',
     homeOwner: '',
-    // Step 10
     driverLicense: '',
     licenseState: '',
-    // Step 11
     payFrequency: '',
     nextPayDate: undefined,
-    // Step 12
     employerName: '',
-    // Step 13
     paymentMethod: '',
-    // Step 14
+    paycheckMethod: '', // 👈 AÑADIR AQUÍ
     accountType: '',
-    // Step 15
     routingNumber: '',
     accountNumber: ''
-  });
-
-  const totalSteps = 15;
+  });  
+  
+  const totalSteps = 18;
 
   // Función para determinar si el paso actual tiene inputs de texto
   const hasTextInputs = (): boolean => {
-    const stepsWithTextInputs = [4, 5, 6, 8, 10, 11, 12, 15];
+    const stepsWithTextInputs = [2, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15];
     return stepsWithTextInputs.includes(currentStep);
   };
 
   // Función para determinar si el paso actual tiene solo opciones de selección
   const hasOnlyOptions = (): boolean => {
-    const stepsWithOnlyOptions = [2, 3, 7, 13];
+    const stepsWithOnlyOptions = [1, 3, 4, 8, 14];
     return stepsWithOnlyOptions.includes(currentStep);
   };
 
@@ -110,65 +104,88 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     };
   }, [currentStep, formData]); // Dependencias importantes
 
-  const isStepValid = (): boolean => {
-    console.log(`Validating step ${currentStep}`, formData);
-    
+  const isStepValid = () => {
     let result = false;
-    
+  
     switch (currentStep) {
-      case 1:
+      case 1: // LoanAmountStep
         result = formData.loanAmount !== '';
         break;
-      case 2:
-        result = formData.loanPurpose !== '' && 
-               (formData.loanPurpose !== 'other' || formData.loanPurposeOther !== '');
+      case 2: // EmailAddressStep
+        result = formData.email !== '';
         break;
-      case 3:
+      case 3: // CreditScoreStep
         result = formData.creditScore !== '';
         break;
-      case 4:
-        // Simplificamos la validación temporalmente
-        result = formData.email !== '' && formData.phone !== '';
+      case 4: // LoanPurposeStep
+        result =
+          formData.loanPurpose !== '' &&
+          (formData.loanPurpose !== 'other' || formData.loanPurposeOther !== '');
         break;
-      case 5:
-        result = formData.firstName !== '' && formData.lastName !== '' && formData.dateOfBirth !== undefined;
+      case 5: // YourNameStep
+        result = formData.firstName !== '' && formData.lastName !== '';
         break;
-      case 6:
+      case 6: // CellPhoneNumberStep
+        result = formData.phone !== '';
+        break;
+      case 7: // AddressStep
         result = formData.zipCode !== '' && formData.address !== '';
         break;
-      case 7:
+      case 8: // IncomeTypeStep
         result = formData.incomeType !== '';
         break;
-      case 8:
-        result = formData.monthlyIncome !== '';
+      case 9: // DateBirthStep
+        result = !!formData.dateOfBirth;
         break;
-      case 9:
-        result = formData.ssn !== '' && formData.homeOwner !== '';
+      case 10: // MonthlyIncomeStep
+        const raw = formData.monthlyIncome;
+        const numeric = parseFloat(raw.replace(/[^0-9.]/g, ""));
+        result = !isNaN(numeric) && numeric > 0;
         break;
-      case 10:
+      case 11: // SSNStep
+        const ssnDigits = formData.ssn.replace(/\D/g, '');
+        result = ssnDigits.length === 9;
+        break;
+      case 12: // HomeOwnerStep
+        result = formData.homeOwner !== '';
+        break;
+      case 13: // DriversLicenseStep
         result = formData.driverLicense !== '' && formData.licenseState !== '';
         break;
-      case 11:
-        result = formData.payFrequency !== '' && formData.nextPayDate !== undefined;
+      case 14: // PaymentScheduleStep
+        const date = formData.nextPayDate;
+        result = !!(date && !isNaN(new Date(date).getTime()));
         break;
-      case 12:
+      case 15: // EmploymentStep
         result = formData.employerName !== '';
         break;
-      case 13:
-        result = formData.paymentMethod !== '';
+      case 16: // PaycheckMethodStep
+        result = formData.paycheckMethod !== '';
         break;
-      case 14:
-        result = formData.accountType !== '';
-        break;
-      case 15:
+      case 17: // BankDetailsStep
         result = formData.routingNumber !== '' && formData.accountNumber !== '';
         break;
       default:
         result = true;
     }
-    
-    console.log(`Step ${currentStep} validation result:`, result);
+  
     return result;
+  };  
+
+  const handlePartialSubmit = async (status: string = 'Incomplete') => {
+    try {
+      const partialData = {
+        ...formData,
+        status: status,
+        completedSteps: currentStep,
+        abandonedAt: new Date().toISOString()
+      };
+      
+      await submitToAirtable(partialData);
+      console.log("Partial data sent to Airtable");
+    } catch (error) {
+      console.error("Error sending partial data:", error);
+    }
   };
 
   const handleNext = () => {
@@ -196,42 +213,62 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = async () => {
-    try {
-      await submitToAirtable(formData);
-      console.log("Data sent to Airtable");
- // Crear el objeto con los datos
-const dataToStore = {
-  firstName: formData.firstName,
-  loanAmount: formData.loanAmount,
-  timestamp: Date.now()
-}
+// Modificar handleSubmit para incluir status
+const handleSubmit = async () => {
+  try {
+    const completeData = {
+      ...formData,
+      status: 'Complete',
+      completedSteps: totalSteps,
+      submittedAt: new Date().toISOString()
+    };
+    
+    await submitToAirtable(completeData);
+    console.log("Complete data sent to Airtable");
+    
+    // Guardar en localStorage con flag de completado
+    localStorage.setItem('loanApplicationData', JSON.stringify({
+      firstName: formData.firstName,
+      loanAmount: formData.loanAmount,
+      timestamp: Date.now(),
+      isComplete: true // Flag importante
+    }));
+    
+    // Redirigir a la página de procesamiento
+    router.push('/loan-processing');
+    
+    // Cerrar el formulario después de un breve delay
+    setTimeout(() => {
+      onClose();
+    }, 100);
+  } catch (error) {
+    alert("There was an error submitting your application.");
+  }
+};
 
-console.log("🚨 Revisar antes de enviar:");
-console.log("Loan Amount:", formData.loanAmount);
-console.log("typeof:", typeof formData.loanAmount);
-
-// Mostrar en consola
-console.log("📦 Datos guardados en localStorage:", dataToStore)
-
-// Guardar en localStorage
-const stored = localStorage.getItem('loanApplicationData')
-const parsed = stored ? JSON.parse(stored) : null
-
-const loanAmount = parsed?.loanAmount || ''
-
-      
-      // Redirigir a la página de procesamiento sin parámetros
-      router.push('/loan-processing');
-      
-      // Cerrar el formulario después de un breve delay
-      setTimeout(() => {
-        onClose();
-      }, 100);
-    } catch (error) {
-      alert("There was an error submitting your application.");
+useEffect(() => {
+  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    if (currentStep > 1 && currentStep < totalSteps) {
+      // Enviar datos parciales antes de cerrar
+      handlePartialSubmit('Abandoned');
     }
   };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+}, [currentStep, formData]);
+
+// Modificar onClose para envío parcial
+const handleClose = () => {
+  if (currentStep > 1 && currentStep < totalSteps) {
+    // Usuario cerró el formulario sin completar
+    handlePartialSubmit('Abandoned');
+  }
+  onClose();
+};
 
   const renderCurrentStep = () => {
     const stepProps = {
@@ -243,39 +280,27 @@ const loanAmount = parsed?.loanAmount || ''
     };
 
     switch (currentStep) {
-      case 1:
-        return <LoanAmountStep {...stepProps} />;
-      case 2:
-        return <LoanPurposeStep {...stepProps} />;
-      case 3:
-        return <CreditScoreStep {...stepProps} />;
-      case 4:
-        return <ContactInfoStep {...stepProps} />;
-      case 5:
-        return <PersonalInfoStep {...stepProps} />;
-      case 6:
-        return <AddressStep {...stepProps} />;
-      case 7:
-        return <IncomeTypeStep {...stepProps} />;
-      case 8:
-        return <MonthlyIncomeStep {...stepProps} />;
-      case 9:
-        return <IdentityVerificationStep {...stepProps} />;
-      case 10:
-        return <DriversLicenseStep {...stepProps} />;
-      case 11:
-        return <PaymentScheduleStep {...stepProps} />;
-      case 12:
-        return <EmploymentStep {...stepProps} />;
-      case 13:
-        return <PaymentMethodStep {...stepProps} />;
-      case 14:
-        return <AccountTypeStep {...stepProps} />;
-      case 15:
-        return <BankDetailsStep {...stepProps} />;
-      default:
-        return null;
+      case 1: return <LoanAmountStep {...stepProps} />;
+      case 2: return <EmailAddressStep {...stepProps} />;
+      case 3: return <CreditScoreStep {...stepProps} />;
+      case 4: return <LoanPurposeStep {...stepProps} />;
+      case 5: return <YourNameStep {...stepProps} />;
+      case 6: return <CellPhoneNumberStep {...stepProps} />;
+      case 7: return <AddressStep {...stepProps} />;
+      case 8: return <IncomeTypeStep {...stepProps} />;
+      case 9: return <DateBirthStep {...stepProps} />;
+      case 10: return <MonthlyIncomeStep {...stepProps} />;
+      case 11: return <SSNStep {...stepProps} />;
+      case 12: return <HomeOwnerStep {...stepProps} />;
+      case 13: return <DriversLicenseStep {...stepProps} />;
+      case 14: return <PaymentScheduleStep {...stepProps} />;
+      case 15: return <EmploymentStep {...stepProps} />;
+      case 16: return <PaycheckMethodStep {...stepProps} />;
+      case 17: return <AccountTypeStep {...stepProps} />;
+      case 18: return <BankDetailsStep {...stepProps} />;
+      default: return null;
     }
+    
   };
 
   return (

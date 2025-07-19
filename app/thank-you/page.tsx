@@ -4,9 +4,66 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, Phone, User, Building2, ArrowRight } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
 
 export default function ThankYouPage() {
   const router = useRouter()
+  const [userData, setUserData] = useState({ firstName: '', loanAmount: '' })
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [approvalPercentage] = useState(Math.floor(Math.random() * (95 - 75 + 1)) + 75)
+
+  useEffect(() => {
+    // Verificar autorización
+    const checkAuthorization = () => {
+      const savedData = localStorage.getItem('loanApplicationData')
+      
+      if (!savedData) {
+        router.push('/')
+        return
+      }
+      
+      try {
+        const parsedData = JSON.parse(savedData)
+        
+        // Verificar timestamp (menos de 10 minutos desde loan-processing)
+        const timestamp = parsedData.timestamp || 0
+        const now = Date.now()
+        const tenMinutes = 10 * 60 * 1000
+        
+        if (now - timestamp > tenMinutes) {
+          localStorage.removeItem('loanApplicationData')
+          router.push('/')
+          return
+        }
+        
+        // Verificar flag de completado
+        if (!parsedData.isComplete) {
+          router.push('/')
+          return
+        }
+        
+        setUserData({
+          firstName: parsedData.firstName || 'Valued Customer',
+          loanAmount: parsedData.loanAmount || '25,000'
+        })
+        
+        setIsAuthorized(true)
+        
+        // Limpiar localStorage después de usar los datos
+        localStorage.removeItem('loanApplicationData')
+      } catch (error) {
+        localStorage.removeItem('loanApplicationData')
+        router.push('/')
+      }
+    }
+    
+    checkAuthorization()
+  }, [router])
+
+  // No renderizar nada hasta verificar autorización
+  if (!isAuthorized) {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-50 flex items-center justify-center p-4">

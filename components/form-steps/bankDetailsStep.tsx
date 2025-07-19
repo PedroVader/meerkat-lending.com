@@ -27,7 +27,7 @@ export default function BankDetailsStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">Bank Account Details</h3>
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">Deposit Details</h3>
         <p className="text-gray-600">Your data is secure with 256-bit encryption</p>
       </div>
       

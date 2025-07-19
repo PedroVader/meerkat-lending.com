@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent } from "@/components/ui/card"
 import { 
-  Shield, 
   Lock, 
   CheckCircle2, 
   FileSearch,
@@ -19,6 +18,56 @@ export default function LoanProcessingPage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
+  const [isComplete, setIsComplete] = useState(false)
+  const [isAuthorized, setIsAuthorized] = useState(false)
+
+  // Verificar autorización
+  useEffect(() => {
+    const checkAuthorization = () => {
+      const savedData = localStorage.getItem('loanApplicationData')
+      
+      if (!savedData) {
+        // No hay datos, redirigir al inicio
+        router.push('/')
+        return
+      }
+      
+      try {
+        const parsedData = JSON.parse(savedData)
+        
+        // Verificar que sea reciente (menos de 5 minutos)
+        const timestamp = parsedData.timestamp || 0
+        const now = Date.now()
+        const fiveMinutes = 5 * 60 * 1000
+        
+        if (now - timestamp > fiveMinutes) {
+          // Datos muy antiguos, redirigir
+          localStorage.removeItem('loanApplicationData')
+          router.push('/')
+          return
+        }
+        
+        // Verificar que tenga el flag de completado
+        if (!parsedData.isComplete) {
+          router.push('/')
+          return
+        }
+        
+        setIsAuthorized(true)
+      } catch (error) {
+        // Error al parsear, redirigir
+        localStorage.removeItem('loanApplicationData')
+        router.push('/')
+      }
+    }
+    
+    checkAuthorization()
+  }, [router])
+
+  // No renderizar nada hasta verificar autorización
+  if (!isAuthorized) {
+    return null
+  }
 
   const processingSteps = [
     { 
@@ -58,10 +107,11 @@ export default function LoanProcessingPage() {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval)
-          // Redirigir a thank-you cuando termine
+          setIsComplete(true)
+          // Redirigir a thank-you después de mostrar la animación
           setTimeout(() => {
             router.push('/thank-you')
-          }, 500)
+          }, 1500) // Aumentado para dar tiempo a la animación
           return 100
         }
         return prev + 2
@@ -82,8 +132,6 @@ export default function LoanProcessingPage() {
         <CardContent className="p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Processing Your Application
             </h1>
@@ -144,7 +192,6 @@ export default function LoanProcessingPage() {
               <span>Bank-Level Security</span>
             </div>
             <div className="flex items-center gap-1">
-              <Shield className="h-3 w-3" />
               <span>Your Data is Safe</span>
             </div>
           </div>
