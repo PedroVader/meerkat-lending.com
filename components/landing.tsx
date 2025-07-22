@@ -7,10 +7,11 @@ import TrustBar from "../components/TrustBar"
 import UseCasesSection from "../components/useCases"
 import TestimonialsSection from "../components/TestimonialsSection"
 import ProcessSection from "../components/ProcessSection"
+import FAQ from "../components/Faq"
+import LegalDisclosures from "../components/Legal-Disclousures"
 import CTASection from "../components/CTASection"
 import Footer from "../components/Footer"
 
-// Simplemente quita el tipo de retorno:
 export default function LandingPage() {
   const [showForm, setShowForm] = useState<boolean>(true)
 
@@ -22,6 +23,8 @@ export default function LandingPage() {
       <UseCasesSection />
       <TestimonialsSection showForm={showForm} setShowForm={setShowForm} />
       <ProcessSection />
+      <FAQ />
+      <LegalDisclosures />
       <CTASection showForm={showForm} setShowForm={setShowForm} />
       <Footer />
     </div>

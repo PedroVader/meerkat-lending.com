@@ -16,7 +16,6 @@ export async function submitToAirtable(formData: any) {
   ? formData.loanAmount.trim().replace(/^"+|"+$/g, '')
   : formData.loanAmount,
       'Loan Purpose': formData.loanPurpose,
-      'Loan Purpose Other': formData.loanPurposeOther || '',
       'Credit Score': formData.creditScore,
       'Email': formData.email,
       'Phone Number': formData.phone,

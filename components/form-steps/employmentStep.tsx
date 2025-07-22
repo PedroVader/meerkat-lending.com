@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Shield } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +18,15 @@ export default function EmploymentStep({
   handleNext,
   isStepValid,
 }: EmploymentStepProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const hasAutoAdvanced = useRef(false);
+
+  // Auto-focus en el input cuando el componente se monta
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  // Escuchar Enter para avanzar
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === "Enter" && isStepValid()) {
@@ -28,7 +37,23 @@ export default function EmploymentStep({
 
     window.addEventListener("keydown", listener);
     return () => window.removeEventListener("keydown", listener);
-  }, [formData, isStepValid, handleNext]);
+  }, [isStepValid, handleNext]);
+
+  // Auto-avanzar cuando el campo tiene al menos 3 caracteres
+  useEffect(() => {
+    if (formData.employerName && formData.employerName.length >= 3 && !hasAutoAdvanced.current && isStepValid()) {
+      hasAutoAdvanced.current = true;
+      // Pequeño delay para mejor UX
+      const timer = setTimeout(() => {
+        handleNext();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+    // Reset la bandera si el usuario borra el contenido
+    if (!formData.employerName || formData.employerName.length < 3) {
+      hasAutoAdvanced.current = false;
+    }
+  }, [formData.employerName, handleNext, isStepValid]);
 
   return (
     <div className="space-y-6">
@@ -42,17 +67,25 @@ export default function EmploymentStep({
             Employer Name / Income Source
           </Label>
           <Input
+            ref={inputRef}
             id="employerName"
             type="text"
             placeholder="Company Name"
-            value={formData.employerName}
+            value={formData.employerName || ""}
             onChange={(e) => handleInputChange("employerName", e.target.value)}
-            className="text-base p-4"
+            className="text-base p-4 border-2 focus:border-emerald-600 transition-colors"
+            autoComplete="off"
           />
-          <p className="text-sm text-emerald-600 text-center mt-3 flex items-center justify-center gap-2">
-            <Shield className="h-4 w-4" />
-            We will NOT contact your employer
-          </p>
+          <div className="mt-3 space-y-2">
+            <p className="text-sm text-emerald-600 text-center flex items-center justify-center gap-2">
+              We will NOT contact your employer
+            </p>
+            {formData.employerName && formData.employerName.length > 0 && (
+              <p className="text-xs text-gray-500 text-center">
+                Press Enter to continue
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

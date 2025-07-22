@@ -18,56 +18,6 @@ export default function LoanProcessingPage() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [progress, setProgress] = useState(0)
-  const [isComplete, setIsComplete] = useState(false)
-  const [isAuthorized, setIsAuthorized] = useState(false)
-
-  // Verificar autorización
-  useEffect(() => {
-    const checkAuthorization = () => {
-      const savedData = localStorage.getItem('loanApplicationData')
-      
-      if (!savedData) {
-        // No hay datos, redirigir al inicio
-        router.push('/')
-        return
-      }
-      
-      try {
-        const parsedData = JSON.parse(savedData)
-        
-        // Verificar que sea reciente (menos de 5 minutos)
-        const timestamp = parsedData.timestamp || 0
-        const now = Date.now()
-        const fiveMinutes = 5 * 60 * 1000
-        
-        if (now - timestamp > fiveMinutes) {
-          // Datos muy antiguos, redirigir
-          localStorage.removeItem('loanApplicationData')
-          router.push('/')
-          return
-        }
-        
-        // Verificar que tenga el flag de completado
-        if (!parsedData.isComplete) {
-          router.push('/')
-          return
-        }
-        
-        setIsAuthorized(true)
-      } catch (error) {
-        // Error al parsear, redirigir
-        localStorage.removeItem('loanApplicationData')
-        router.push('/')
-      }
-    }
-    
-    checkAuthorization()
-  }, [router])
-
-  // No renderizar nada hasta verificar autorización
-  if (!isAuthorized) {
-    return null
-  }
 
   const processingSteps = [
     { 
@@ -102,16 +52,16 @@ export default function LoanProcessingPage() {
     }
   ]
 
+  // Progress animation - Empieza inmediatamente sin verificaciones
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval)
-          setIsComplete(true)
-          // Redirigir a thank-you después de mostrar la animación
+          // Redirigir a thank-you después de completar
           setTimeout(() => {
             router.push('/thank-you')
-          }, 1500) // Aumentado para dar tiempo a la animación
+          }, 1500)
           return 100
         }
         return prev + 2
@@ -121,6 +71,7 @@ export default function LoanProcessingPage() {
     return () => clearInterval(interval)
   }, [router])
 
+  // Update current step basado en el progreso
   useEffect(() => {
     const stepProgress = Math.floor((progress / 100) * processingSteps.length)
     setCurrentStep(Math.min(stepProgress, processingSteps.length - 1))

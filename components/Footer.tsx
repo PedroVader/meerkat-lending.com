@@ -23,10 +23,7 @@ export default function Footer(): React.JSX.Element {
                 <Shield className="h-3 w-3 mr-1" />
                 SSL 256-bit
               </Badge>
-              <Badge variant="secondary" className="bg-gray-800 text-gray-300">
-                <Award className="h-3 w-3 mr-1" />
-                A+ BBB
-              </Badge>
+  
             </div>
           </div>
 
@@ -45,7 +42,7 @@ export default function Footer(): React.JSX.Element {
             <h4 className="font-semibold mb-4 text-emerald-400">Resources</h4>
             <ul className="space-y-3 text-gray-400">
               <li><a href="/blog" className="hover:text-white transition-colors">Financial blog</a></li> {/* Enlace al blog */}
-              <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
+              <li><a href="#FAQ" className="hover:text-white transition-colors">FAQ</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Glossary</a></li>
             </ul>
           </div>
@@ -82,7 +79,7 @@ export default function Footer(): React.JSX.Element {
               </p>
               <p className="text-sm text-gray-400 leading-relaxed">
                 <strong className="text-gray-300">Privacy:</strong> We protect your personal information with bank-level encryption. 
-                We never sell your data. Read our full <a href="#" className="text-emerald-400 hover:text-emerald-300">Privacy Policy</a>.
+                We never sell your data. Read our full <a href="/privacy-policy" className="text-emerald-400 hover:text-emerald-300">Privacy Policy</a>.
               </p>
             </div>
           </div>

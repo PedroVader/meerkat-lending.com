@@ -21,11 +21,7 @@ export default function Header({ showForm, setShowForm }: HeaderProps): React.JS
           <div className="hidden lg:flex items-center space-x-6">
             <a href="#how-it-works" className="text-gray-700 hover:text-emerald-600 font-medium">How it works</a>
             <a href="#testimonials" className="text-gray-700 hover:text-emerald-600 font-medium">Success stories</a>
-            <a href="#" className="text-gray-700 hover:text-emerald-600 font-medium">FAQ</a>
-            <Button variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50">
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Live chat
-            </Button>
+            <a href="#FAQ" className="text-gray-700 hover:text-emerald-600 font-medium">FAQ</a>
           </div>
         </div>
       </div>

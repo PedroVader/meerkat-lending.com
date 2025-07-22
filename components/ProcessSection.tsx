@@ -40,10 +40,9 @@ export default function ProcessSection(): React.JSX.Element {
                       </p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="flex items-center text-emerald-600">
-                          <Clock className="h-4 w-4 mr-1" />
                           2 min average
                         </span>
-                        <span className="text-gray-500">• No SSN needed to start</span>
+                        <span className="text-gray-500">• Quick form with no credit check</span>
                       </div>
                     </div>
                   </div>
@@ -61,11 +60,10 @@ export default function ProcessSection(): React.JSX.Element {
                     <div>
                       <h3 className="text-xl font-semibold mb-2 text-gray-900">Watch the magic happen</h3>
                       <p className="text-gray-600 mb-4">
-                        Our system talks to 50+ lenders at once (yeah, it's pretty cool). You'll see real offers with actual rates - not "results may vary" nonsense.
+                        Our system talks to 50+ lenders at once (yeah, it's pretty cool).
                       </p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="flex items-center text-emerald-600">
-                          <Users className="h-4 w-4 mr-1" />
                           50+ lenders compete
                         </span>
                         <span className="text-gray-500">• Real-time results</span>
@@ -81,16 +79,14 @@ export default function ProcessSection(): React.JSX.Element {
                     3
                   </div>
                 </div>
-                <div className="flex-1 bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100 group-hover:border-emerald-100 transition-colors">
+                  <div className="flex-1 bg-gradient-to-r from-gray-50 to-white rounded-xl p-6 border border-gray-100 group-hover:border-emerald-100 transition-colors">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 text-gray-900">Pick your favorite</h3>
+                      <h3 className="text-xl font-semibold mb-2 text-gray-900">GoQualifi will call you</h3>
                       <p className="text-gray-600 mb-4">
-                        All offers laid out clearly - APR, monthly payment, total cost. Take your time, ask questions. Accept only if it works for you. Zero pressure.
-                      </p>
+                      All your offers are clearly laid out — APR, monthly payment, total cost. GoQualifi will call you to walk you through the details and present your best match. Take your time, ask questions, and accept only if it works for you. No pressure, ever.</p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="flex items-center text-emerald-600">
-                          <Award className="h-4 w-4 mr-1" />
                           Side-by-side comparison
                         </span>
                         <span className="text-gray-500">• Chat support available</span>
@@ -115,7 +111,6 @@ export default function ProcessSection(): React.JSX.Element {
                       </p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="flex items-center text-emerald-600">
-                          <DollarSign className="h-4 w-4 mr-1" />
                           Next-day typical
                         </span>
                         <span className="text-gray-500">• SMS updates included</span>
@@ -144,7 +139,7 @@ export default function ProcessSection(): React.JSX.Element {
               </span>
             </div>
             <p className="mt-6 text-gray-500">
-              Still have questions? <a href="#" className="text-emerald-600 hover:text-emerald-700 font-medium">Check our FAQ</a> or <a href="#" className="text-emerald-600 hover:text-emerald-700 font-medium">chat with us</a>
+              Still have questions? <a href="#FAQ" className="text-emerald-600 hover:text-emerald-700 font-medium">Check our FAQ</a> 
             </p>
           </div>
         </div>

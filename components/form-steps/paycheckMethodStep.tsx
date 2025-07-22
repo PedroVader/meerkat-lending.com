@@ -13,8 +13,8 @@ export default function PaycheckMethodStep({
   handleOptionSelect,
 }: PaycheckMethodStepProps) {
   const options = [
-    { label: "Electronic Deposit", value: "electronic" },
-    { label: "Paper Check", value: "check" },
+    { label: "Electronic Deposit", value: "Electronic Deposit" },
+    { label: "Paper Check", value: "Paper Check" },
   ];
 
   return (
@@ -29,10 +29,10 @@ export default function PaycheckMethodStep({
         {options.map((option) => (
           <button
             key={option.value}
-            onClick={() => handleOptionSelect("paycheckMethod", option.value)}
+            onClick={() => handleOptionSelect("paymentMethod", option.value)}
             className={cn(
               "w-full flex justify-between items-center px-6 py-4 border-2 rounded-full font-medium text-base transition-all duration-200",
-              formData.paycheckMethod === option.value
+              formData.paymentMethod === option.value
                 ? "bg-emerald-600 text-white shadow-lg"
                 : "border-gray-300 hover:border-emerald-400 hover:bg-emerald-50"
             )}
@@ -41,7 +41,7 @@ export default function PaycheckMethodStep({
             <ArrowRight
               className={cn(
                 "ml-2 h-5 w-5",
-                formData.paycheckMethod === option.value ? "text-white" : "text-emerald-600"
+                formData.paymentMethod === option.value ? "text-white" : "text-emerald-600"
               )}
             />
           </button>
@@ -51,7 +51,7 @@ export default function PaycheckMethodStep({
       <div className="pt-6 border-t border-gray-200 text-sm text-gray-500">
         Join our community of happy customers!
         <div className="mt-2 text-xs">
-          🔒 256-bit SSL
+          256-bit SSL
         </div>
       </div>
     </div>

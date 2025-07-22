@@ -13,7 +13,7 @@ export default function UseCasesSection(): React.JSX.Element {
       <div className="container mx-auto px-4 relative">
         <div className="text-center mb-12">
           <div className="inline-flex items-center bg-amber-50 text-amber-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
-            <span>2.3M+ loans funded last year</span>
+            <span>1.3M+ loans funded last year</span>
           </div>
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             Real people. Real dreams. <span className="text-emerald-600 relative">Real money.
@@ -31,7 +31,7 @@ export default function UseCasesSection(): React.JSX.Element {
           <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-300 border-0 bg-white">
             <div className="h-48 overflow-hidden relative">
               <img 
-                src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=800&h=600&fit=crop" 
+                src="/fixing-house.jpg" 
                 alt="Family moving into new home"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
@@ -64,7 +64,7 @@ export default function UseCasesSection(): React.JSX.Element {
           <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-300 border-0 bg-white">
             <div className="h-48 overflow-hidden relative">
               <img 
-                src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=800&h=600&fit=crop" 
+                src="/mechanic-workshop.jpg" 
                 alt="Business owner in his shop"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
@@ -97,7 +97,7 @@ export default function UseCasesSection(): React.JSX.Element {
           <Card className="group overflow-hidden hover:shadow-2xl transition-all duration-300 border-0 bg-white">
             <div className="h-48 overflow-hidden relative">
               <img 
-                src="https://images.unsplash.com/photo-1609220136736-443140cffec6?w=800&h=600&fit=crop" 
+                src="/bootcamps.jpg" 
                 alt="College student"
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
@@ -142,7 +142,7 @@ export default function UseCasesSection(): React.JSX.Element {
                 <Heart className="h-8 w-8 text-emerald-600" />
                 <div className="text-right">
                   <p className="text-xs text-gray-500">Funded this month</p>
-                  <p className="text-sm font-bold text-gray-900">2,847</p>
+                  <p className="text-sm font-bold text-gray-900">1.000+</p>
                 </div>
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">Big life stuff</h3>

@@ -30,7 +30,7 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center bg-emerald-100 text-emerald-700 text-sm font-medium px-4 py-2 rounded-full mb-4">
                 <Star className="h-4 w-4 mr-1" />
-                4.9/5 rating based on 12,847 reviews
+                4.9/5 rating based on +1,000 reviews
               </div>
 
               <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight max-w-4xl mx-auto lg:mx-0 mb-4">
@@ -94,7 +94,7 @@ export default function HeroSection({ showForm, setShowForm }: HeroSectionProps)
 
           {/* Right Column - Form */}
           <div className="relative flex justify-center">
-            <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-gray-100 p-6">
+            <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-gray-100 p-6" id="form-container">
               {showForm ? (
                 <MultistepLoanForm onClose={() => setShowForm(false)} />
               ) : (

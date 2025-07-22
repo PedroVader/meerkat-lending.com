@@ -1,24 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, X, Lock, Shield } from "lucide-react";
+import { CheckCircle, X, Lock, Shield, CaseLower } from "lucide-react";
 import { submitToAirtable } from "@/lib/api/airtable";
 
 // Import form steps
 import LoanAmountStep from "./loanAmountStep";
 import LoanPurposeStep from "./loanPurposeStep";
 import CreditScoreStep from "./creditStepScore";
-import ContactInfoStep from "./contactInfoStep";
-import PersonalInfoStep from "./personalInfoStep";
 import AddressStep from "./adressStep";
 import IncomeTypeStep from "./incomeTypeStep";
 import MonthlyIncomeStep from "./monthlyIncomeStep";
-import IdentityVerificationStep from "./identityVerificationStep";
 import DriversLicenseStep from "./driversLicenseStep";
 import PaymentScheduleStep from "./paymentScheduleStep";
 import EmploymentStep from "./employmentStep";
-import PaymentMethodStep from "./paymentMethodStep";
 import AccountTypeStep from "./accountTypeStep";
 import BankDetailsStep from "./bankDetailsStep";
 import DateBirthStep from "./dateBirthStep";
@@ -54,18 +50,17 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     payFrequency: '',
     nextPayDate: undefined,
     employerName: '',
-    paymentMethod: '',
-    paycheckMethod: '', // 👈 AÑADIR AQUÍ
+    paycheckMethod: '',
     accountType: '',
     routingNumber: '',
     accountNumber: ''
   });  
   
-  const totalSteps = 18;
+  const totalSteps = 19;
 
   // Función para determinar si el paso actual tiene inputs de texto
   const hasTextInputs = (): boolean => {
-    const stepsWithTextInputs = [2, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15];
+    const stepsWithTextInputs = [2, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15, 16];
     return stepsWithTextInputs.includes(currentStep);
   };
 
@@ -75,36 +70,7 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     return stepsWithOnlyOptions.includes(currentStep);
   };
 
-  // Manejador global de tecla Enter
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      // Solo manejar Enter si el paso tiene inputs de texto
-      if (event.key === 'Enter' && hasTextInputs()) {
-        event.preventDefault(); // Prevenir submit del formulario
-        
-        // Si estamos en el último paso, hacer submit
-        if (currentStep === totalSteps && isStepValid()) {
-          console.log('Enter pressed on last step - submitting form');
-          handleSubmit();
-        } 
-        // Si no, avanzar al siguiente paso
-        else if (currentStep < totalSteps && isStepValid()) {
-          console.log('Enter pressed - advancing to next step');
-          setCurrentStep(currentStep + 1);
-        }
-      }
-    };
-
-    // Agregar el event listener
-    window.addEventListener('keypress', handleKeyPress);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener('keypress', handleKeyPress);
-    };
-  }, [currentStep, formData]); // Dependencias importantes
-
-  const isStepValid = () => {
+  const isStepValid = useCallback(() => {
     let result = false;
   
     switch (currentStep) {
@@ -112,15 +78,14 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
         result = formData.loanAmount !== '';
         break;
       case 2: // EmailAddressStep
-        result = formData.email !== '';
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        result = formData.email !== '' && emailRegex.test(formData.email);
         break;
       case 3: // CreditScoreStep
         result = formData.creditScore !== '';
         break;
       case 4: // LoanPurposeStep
-        result =
-          formData.loanPurpose !== '' &&
-          (formData.loanPurpose !== 'other' || formData.loanPurposeOther !== '');
+        result = formData.loanPurpose !== '';
         break;
       case 5: // YourNameStep
         result = formData.firstName !== '' && formData.lastName !== '';
@@ -138,9 +103,7 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
         result = !!formData.dateOfBirth;
         break;
       case 10: // MonthlyIncomeStep
-        const raw = formData.monthlyIncome;
-        const numeric = parseFloat(raw.replace(/[^0-9.]/g, ""));
-        result = !isNaN(numeric) && numeric > 0;
+        result = formData.monthlyIncome !== '';
         break;
       case 11: // SSNStep
         const ssnDigits = formData.ssn.replace(/\D/g, '');
@@ -153,16 +116,22 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
         result = formData.driverLicense !== '' && formData.licenseState !== '';
         break;
       case 14: // PaymentScheduleStep
+        result = formData.payFrequency !== '';
+        break;
+      case 15: // NextPaydateStep
         const date = formData.nextPayDate;
         result = !!(date && !isNaN(new Date(date).getTime()));
         break;
-      case 15: // EmploymentStep
+      case 16: // EmploymentStep
         result = formData.employerName !== '';
         break;
-      case 16: // PaycheckMethodStep
+      case 17: // PaycheckMethodStep
         result = formData.paycheckMethod !== '';
         break;
-      case 17: // BankDetailsStep
+      case 18: // AccountTypeStep
+        result = formData.accountType !== '';
+        break;
+      case 19: // BankDetailsStep
         result = formData.routingNumber !== '' && formData.accountNumber !== '';
         break;
       default:
@@ -170,9 +139,9 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     }
   
     return result;
-  };  
+  }, [currentStep, formData]);
 
-  const handlePartialSubmit = async (status: string = 'Incomplete') => {
+  const handlePartialSubmit = useCallback(async (status: string = 'Incomplete') => {
     try {
       const partialData = {
         ...formData,
@@ -186,7 +155,80 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     } catch (error) {
       console.error("Error sending partial data:", error);
     }
-  };
+  }, [formData, currentStep]);
+
+  const handleSubmit = useCallback(async () => {
+    try {
+      const completeData = {
+        ...formData,
+        status: 'Complete',
+        completedSteps: totalSteps,
+        submittedAt: new Date().toISOString()
+      };
+      
+      await submitToAirtable(completeData);
+      console.log("Complete data sent to Airtable");
+      
+      // Guardar en localStorage con flag de completado
+      localStorage.setItem('loanApplicationData', JSON.stringify({
+        firstName: formData.firstName,
+        loanAmount: formData.loanAmount,
+        timestamp: Date.now(),
+        isComplete: true
+      }));
+      
+      // Redirigir a la página de procesamiento
+      router.push('/loan-processing');
+      
+      // Cerrar el formulario después de un breve delay
+      setTimeout(() => {
+        onClose();
+      }, 100);
+    } catch (error) {
+      alert("There was an error submitting your application.");
+    }
+  }, [formData, router, onClose]);
+
+  // Manejador global de tecla Enter
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      // Solo manejar Enter si el paso tiene inputs de texto
+      if (event.key === 'Enter' && hasTextInputs()) {
+        event.preventDefault();
+        
+        // Si estamos en el último paso, hacer submit
+        if (currentStep === totalSteps && isStepValid()) {
+          console.log('Enter pressed on last step - submitting form');
+          handleSubmit();
+        } 
+        // Si no, avanzar al siguiente paso
+        else if (currentStep < totalSteps && isStepValid()) {
+          console.log('Enter pressed - advancing to next step');
+          setCurrentStep(currentStep + 1);
+        }
+      }
+    };
+
+    window.addEventListener('keypress', handleKeyPress);
+    return () => {
+      window.removeEventListener('keypress', handleKeyPress);
+    };
+  }, [currentStep, isStepValid, handleSubmit]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (currentStep > 1 && currentStep < totalSteps) {
+        // Enviar datos parciales antes de cerrar
+        handlePartialSubmit('Abandoned');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [currentStep, handlePartialSubmit, totalSteps]);
 
   const handleNext = () => {
     console.log('handleNext called');
@@ -213,62 +255,14 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
     setFormData({ ...formData, [field]: value });
   };
 
-// Modificar handleSubmit para incluir status
-const handleSubmit = async () => {
-  try {
-    const completeData = {
-      ...formData,
-      status: 'Complete',
-      completedSteps: totalSteps,
-      submittedAt: new Date().toISOString()
-    };
-    
-    await submitToAirtable(completeData);
-    console.log("Complete data sent to Airtable");
-    
-    // Guardar en localStorage con flag de completado
-    localStorage.setItem('loanApplicationData', JSON.stringify({
-      firstName: formData.firstName,
-      loanAmount: formData.loanAmount,
-      timestamp: Date.now(),
-      isComplete: true // Flag importante
-    }));
-    
-    // Redirigir a la página de procesamiento
-    router.push('/loan-processing');
-    
-    // Cerrar el formulario después de un breve delay
-    setTimeout(() => {
-      onClose();
-    }, 100);
-  } catch (error) {
-    alert("There was an error submitting your application.");
-  }
-};
-
-useEffect(() => {
-  const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  // Modificar onClose para envío parcial
+  const handleClose = () => {
     if (currentStep > 1 && currentStep < totalSteps) {
-      // Enviar datos parciales antes de cerrar
+      // Usuario cerró el formulario sin completar
       handlePartialSubmit('Abandoned');
     }
+    onClose();
   };
-
-  window.addEventListener('beforeunload', handleBeforeUnload);
-  
-  return () => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-  };
-}, [currentStep, formData]);
-
-// Modificar onClose para envío parcial
-const handleClose = () => {
-  if (currentStep > 1 && currentStep < totalSteps) {
-    // Usuario cerró el formulario sin completar
-    handlePartialSubmit('Abandoned');
-  }
-  onClose();
-};
 
   const renderCurrentStep = () => {
     const stepProps = {
@@ -294,89 +288,84 @@ const handleClose = () => {
       case 12: return <HomeOwnerStep {...stepProps} />;
       case 13: return <DriversLicenseStep {...stepProps} />;
       case 14: return <PaymentScheduleStep {...stepProps} />;
-      case 15: return <EmploymentStep {...stepProps} />;
-      case 16: return <PaycheckMethodStep {...stepProps} />;
-      case 17: return <AccountTypeStep {...stepProps} />;
-      case 18: return <BankDetailsStep {...stepProps} />;
+      case 15: return <NextPaydateStep {...stepProps} />
+      case 16: return <EmploymentStep {...stepProps} />;
+      case 17: return <PaycheckMethodStep {...stepProps} />;
+      case 18: return <AccountTypeStep {...stepProps} />;
+      case 19: return <BankDetailsStep {...stepProps} />;
       default: return null;
     }
-    
   };
 
   return (
-<div className="w-full h-full flex flex-col">
-    {/* Header fijo */}
-    <div className="px-4 pt-4 pb-2 border-b border-gray-100">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-base font-bold text-gray-800">Loan Application</h2>
-          <p className="text-xs text-gray-500">Quick and secure process</p>
+    <div className="w-full h-full flex flex-col">
+      {/* Header fijo */}
+      <div className="px-4 pt-4 pb-2 border-b border-gray-100">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-bold text-gray-800">Loan Application</h2>
+            <p className="text-xs text-gray-500">Quick and secure process</p>
+          </div>
+
         </div>
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
-        >
-          <X className="h-4 w-4" />
-        </button>
       </div>
-    </div>
 
-    {/* Progress fijo */}
-    <div className="px-4 py-2 border-b border-gray-100">
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-xs font-semibold text-gray-600">
-          Step {currentStep} of {totalSteps}
-        </span>
-        <span className="text-xs text-emerald-600 font-semibold">
-          {Math.round((currentStep / totalSteps) * 100)}% Complete
-        </span>
+      {/* Progress fijo */}
+      <div className="px-4 py-2 border-b border-gray-100">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs font-semibold text-gray-600">
+            Step {currentStep} of {totalSteps}
+          </span>
+          <span className="text-xs text-emerald-600 font-semibold">
+            {Math.round((currentStep / totalSteps) * 100)}% Complete
+          </span>
+        </div>
+        <Progress value={(currentStep / totalSteps) * 100} className="h-1.5 bg-gray-200" />
       </div>
-      <Progress value={(currentStep / totalSteps) * 100} className="h-1.5 bg-gray-200" />
-    </div>
 
-    {/* Content con scroll */}
-    <div className="flex-1 overflow-y-auto px-4 py-4">
-      <div className="min-h-[300px]">
-        {renderCurrentStep()}
+      {/* Content con scroll */}
+      <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="min-h-[300px]">
+          {renderCurrentStep()}
+        </div>
       </div>
-    </div>
 
-    {/* Footer fijo */}
-    <div className="px-4 pb-4 pt-2 border-t border-gray-100 bg-white">
-      {/* Navigation con indicación de Enter condicional */}
-      {hasTextInputs() && (
-        <div className="text-center text-xs text-gray-600 mb-2">
-          {currentStep < totalSteps ? (
-            <>Press <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 border border-gray-300 rounded font-semibold">Enter</kbd> to continue</>
-          ) : (
-            <>Press <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 border border-gray-300 rounded font-semibold">Enter</kbd> to get your rates</>
-          )}
-        </div>
-      )}
+      {/* Footer fijo */}
+      <div className="px-4 pb-4 pt-2 border-t border-gray-100 bg-white">
+        {/* Navigation con indicación de Enter condicional */}
+        {hasTextInputs() && (
+          <div className="text-center text-xs text-gray-600 mb-2">
+            {currentStep < totalSteps ? (
+              <>Press <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 border border-gray-300 rounded font-semibold">Enter</kbd> to continue</>
+            ) : (
+              <>Press <kbd className="px-1.5 py-0.5 text-xs bg-gray-100 border border-gray-300 rounded font-semibold">Enter</kbd> to get your rates</>
+            )}
+          </div>
+        )}
 
-      {/* Mensaje para pasos con opciones */}
-      {hasOnlyOptions() && (
-        <div className="text-center text-xs text-gray-600 mb-2">
-          Select an option to continue
-        </div>
-      )}
+        {/* Mensaje para pasos con opciones */}
+        {hasOnlyOptions() && (
+          <div className="text-center text-xs text-gray-600 mb-2">
+            Select an option to continue
+          </div>
+        )}
 
-      {/* Trust badges */}
-      <div className="flex items-center justify-center gap-3 text-xs text-gray-500">
-        <div className="flex items-center gap-1">
-          <Lock className="h-2.5 w-2.5" />
-          <span>SSL Secured</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <Shield className="h-2.5 w-2.5" />
-          <span>256-bit Encryption</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <CheckCircle className="h-2.5 w-2.5" />
-          <span>No Credit Impact</span>
+        {/* Trust badges */}
+        <div className="flex items-center justify-center gap-3 text-xs text-gray-500">
+          <div className="flex items-center gap-1">
+            <Lock className="h-2.5 w-2.5" />
+            <span>SSL Secured</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Shield className="h-2.5 w-2.5" />
+            <span>256-bit Encryption</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <CheckCircle className="h-2.5 w-2.5" />
+            <span>No Credit Impact</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
-}  
+}

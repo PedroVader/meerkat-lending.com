@@ -90,17 +90,20 @@ export default function ContactInfoStep({ formData, handleInputChange, isStepVal
   const isEmailValid = formData.email && !emailError;
   const isPhoneValid = formData.phone && !phoneError;
 
+  // Check if step is complete and valid
+  const isStepComplete = isEmailValid && isPhoneValid;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="text-center">
-        <h3 className="text-2xl font-bold text-gray-800 mb-2">Contact Information</h3>
-        <p className="text-gray-600">We'll use this to send your loan offers</p>
+        <Mail className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
+        <h3 className="text-3xl font-bold text-gray-800 mb-3">Contact Information</h3>
+        <p className="text-lg text-gray-600">We'll use this to send your loan offers</p>
       </div>
       
-      <div className="max-w-md mx-auto space-y-6">
-        {/* Email Input */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-base font-medium">
+          <Label htmlFor="email" className="text-base font-medium block">
             Email Address
           </Label>
           <div className="relative">
@@ -137,9 +140,8 @@ export default function ContactInfoStep({ formData, handleInputChange, isStepVal
           )}
         </div>
         
-        {/* Phone Input */}
         <div className="space-y-2">
-          <Label htmlFor="phone" className="text-base font-medium">
+          <Label htmlFor="phone" className="text-base font-medium block">
             Phone Number
           </Label>
           <div className="relative">
@@ -175,21 +177,21 @@ export default function ContactInfoStep({ formData, handleInputChange, isStepVal
           )}
           <p className="text-xs text-gray-500">US phone numbers only (10-11 digits)</p>
         </div>
-        
-        {/* Trust message */}
-        <div className="bg-emerald-50 rounded-xl p-4 mt-6">
-          <div className="flex items-start gap-3">
-            <div className="flex-shrink-0">
-              <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
-                <Check className="h-4 w-4 text-white" />
-              </div>
+      </div>
+      
+      {/* Trust message */}
+      <div className="bg-emerald-50 rounded-xl p-4 max-w-2xl mx-auto">
+        <div className="flex items-start gap-3">
+          <div className="flex-shrink-0">
+            <div className="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center">
+              <Check className="h-4 w-4 text-white" />
             </div>
-            <div>
-              <p className="text-sm font-semibold text-emerald-800">Your information is secure</p>
-              <p className="text-xs text-emerald-700 mt-1">
-                We use bank-level encryption and never share your contact details with third parties.
-              </p>
-            </div>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-emerald-800">Your information is secure</p>
+            <p className="text-xs text-emerald-700 mt-1">
+              We use bank-level encryption and never share your contact details with third parties.
+            </p>
           </div>
         </div>
       </div>

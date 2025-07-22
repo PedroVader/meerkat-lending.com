@@ -204,18 +204,8 @@ export default function BlogPostPage() {
     const url = shareUrl
 
     switch (platform) {
-      case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`)
-        break
-      case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`)
-        break
-      case 'linkedin':
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`)
-        break
       case 'copy':
         navigator.clipboard.writeText(url)
-        alert('Link copied to clipboard!')
         break
     }
     setShowShareMenu(false)
@@ -318,27 +308,6 @@ export default function BlogPostPage() {
                   {showShareMenu && (
                     <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10 min-w-[200px]">
                       <div className="p-2">
-                        <button
-                          onClick={() => handleShare('twitter')}
-                          className="flex items-center w-full p-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
-                        >
-                          <Twitter className="h-4 w-4 mr-3 text-blue-400" />
-                          Share on Twitter
-                        </button>
-                        <button
-                          onClick={() => handleShare('facebook')}
-                          className="flex items-center w-full p-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
-                        >
-                          <Facebook className="h-4 w-4 mr-3 text-blue-600" />
-                          Share on Facebook
-                        </button>
-                        <button
-                          onClick={() => handleShare('linkedin')}
-                          className="flex items-center w-full p-2 text-sm text-gray-700 hover:bg-gray-100 rounded"
-                        >
-                          <Linkedin className="h-4 w-4 mr-3 text-blue-700" />
-                          Share on LinkedIn
-                        </button>
                         <button
                           onClick={() => handleShare('copy')}
                           className="flex items-center w-full p-2 text-sm text-gray-700 hover:bg-gray-100 rounded"

@@ -20,7 +20,6 @@ export default function HomeOwnerStep({
   return (
     <div className="space-y-8">
       <div className="text-center mt-5">
-        <Home className="h-10 w-10 text-emerald-600 mx-auto mb-3" />
         <h3 className="text-3xl font-bold text-gray-800 mb-3">
           Are you a homeowner?
         </h3>

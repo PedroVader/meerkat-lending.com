@@ -11,10 +11,6 @@ export default function TrustBar(): React.JSX.Element {
             <span className="font-medium">256-bit SSL Encryption</span>
           </div>
           <div className="flex items-center space-x-2">
-            <Award className="h-5 w-5 text-emerald-600" />
-            <span className="font-medium">A+ BBB Rating</span>
-          </div>
-          <div className="flex items-center space-x-2">
             <Users className="h-5 w-5 text-emerald-600" />
             <span className="font-medium">500,000+ happy customers</span>
           </div>
