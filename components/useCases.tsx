@@ -1,6 +1,24 @@
 import React from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Home, Briefcase, GraduationCap, Heart } from "lucide-react"
+import { Home, Briefcase, GraduationCap, Heart } from "lucide-react"  
+import { useState, useEffect } from "react"
+
+
+// Componente interno para mostrar número aleatorio de viewers
+function RateViewersCounter() {
+  const [viewers, setViewers] = useState(0);
+
+  useEffect(() => {
+    const random = Math.floor(Math.random() * (800 - 300 + 1)) + 300;
+    setViewers(random);
+  }, []);
+
+  return (
+    <span className="text-sm text-gray-600">
+      <span className="font-semibold">{viewers}</span> people checking rates now
+    </span>
+  );
+}
 
 export default function UseCasesSection(): React.JSX.Element {
   return (
@@ -168,7 +186,7 @@ export default function UseCasesSection(): React.JSX.Element {
             </div>
             <span className="text-gray-300">|</span>
             <span className="text-sm text-gray-600">
-              <span className="font-semibold">412</span> people checking rates now
+            <RateViewersCounter />
             </span>
           </div>
         </div>
