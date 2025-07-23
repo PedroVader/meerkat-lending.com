@@ -5,7 +5,6 @@ const AIRTABLE_BASE_ID = 'appmwFMIFckGpGfbQ'; // Tu Base ID
 const AIRTABLE_TABLE_NAME = 'Loan Applications'; // Nombre de tu tabla
 
 export async function submitToAirtable(formData: any) {
-  console.log("📨 submitToAirtable() fue llamado")
 
   // Log del formData original
   console.log("📥 formData recibido:", formData)
@@ -50,9 +49,6 @@ export async function submitToAirtable(formData: any) {
     }
   };
   
-
-  // Log de los datos que serán enviados
-  console.log("📤 Enviando a Airtable:", JSON.stringify(airtableData, null, 2))
 
   try {
     const response = await fetch(
