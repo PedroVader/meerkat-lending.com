@@ -79,16 +79,15 @@ export default function CellPhoneNumberStep({
     }
   };
 
-  const isPhoneValid =
-    formData.phone &&
-    !phoneError &&
-    /^\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/.test(formData.phone.replace(/\D/g, ""));
+  // Validar que el teléfono tenga 10 u 11 dígitos
+  const phoneDigits = formData.phone ? formData.phone.replace(/\D/g, "") : "";
+  const isPhoneValid = phoneDigits.length === 10 || phoneDigits.length === 11;
 
   useEffect(() => {
     if (formData.phone) {
       validateAndFormatPhone(formData.phone);
     }
-  }, [formData.phone]);
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -111,14 +110,14 @@ export default function CellPhoneNumberStep({
             type="tel"
             inputMode="tel"
             placeholder="(123) 456-7890"
-            value={formData.phone}
+            value={formData.phone || ""}
             onChange={handlePhoneChange}
             onKeyPress={handleKeyPress}
             maxLength={18} // (123) 456-7890 or +1 (123) 456-7890
             className={cn(
               "w-full px-6 py-4 text-lg pr-12 rounded-full border-2 transition-colors",
               formData.phone
-                ? isPhoneValid
+                ? isPhoneValid && !phoneError
                   ? "border-green-500 focus:border-green-500"
                   : "border-red-500 focus:border-red-500"
                 : "border-gray-200 focus:border-emerald-500"
@@ -126,7 +125,7 @@ export default function CellPhoneNumberStep({
           />
           {formData.phone && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              {isPhoneValid ? (
+              {isPhoneValid && !phoneError ? (
                 <Check className="h-5 w-5 text-green-500" />
               ) : (
                 <X className="h-5 w-5 text-red-500" />
@@ -135,8 +134,10 @@ export default function CellPhoneNumberStep({
           )}
         </div>
 
-        {phoneError && <p className="text-sm text-red-500">{phoneError}</p>}
-        {isPhoneValid && (
+        {phoneError && formData.phone && (
+          <p className="text-sm text-red-500">{phoneError}</p>
+        )}
+        {isPhoneValid && !phoneError && formData.phone && (
           <p className="text-sm text-green-600">✓ Valid US phone number</p>
         )}
         <p className="text-xs text-gray-500">US numbers only (10–11 digits)</p>

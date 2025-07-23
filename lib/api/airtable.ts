@@ -12,16 +12,21 @@ export async function submitToAirtable(formData: any) {
 
   const airtableData = {
     fields: {
-'Loan Amount': typeof formData.loanAmount === 'string'
-  ? formData.loanAmount.trim().replace(/^"+|"+$/g, '')
-  : formData.loanAmount,
+      'Loan Amount': typeof formData.loanAmount === 'string'
+        ? formData.loanAmount.trim().replace(/^"+|"+$/g, '')
+        : formData.loanAmount,
       'Loan Purpose': formData.loanPurpose,
       'Credit Score': formData.creditScore,
       'Email': formData.email,
       'Phone Number': formData.phone,
       'First Name': formData.firstName,
       'Last Name': formData.lastName,
-      'Date of Birth': formData.dateOfBirth,
+      // FORMATEAR DATE OF BIRTH
+      'Date of Birth': formData.dateOfBirth
+        ? (formData.dateOfBirth instanceof Date 
+            ? formData.dateOfBirth.toISOString().split('T')[0]
+            : new Date(formData.dateOfBirth).toISOString().split('T')[0])
+        : '',
       'Zip Code': formData.zipCode,
       'Address': formData.address,
       'Income Type': formData.incomeType,
@@ -31,11 +36,14 @@ export async function submitToAirtable(formData: any) {
       'Driver License': formData.driverLicense,
       'License State': formData.licenseState,
       'Pay Frequency': formData.payFrequency,
+      // FORMATEAR NEXT PAY DATE
       'Next Pay Date': formData.nextPayDate
-        ? new Date(formData.nextPayDate).toISOString().split("T")[0]
+        ? (formData.nextPayDate instanceof Date 
+            ? formData.nextPayDate.toISOString().split('T')[0]
+            : new Date(formData.nextPayDate).toISOString().split('T')[0])
         : '',
       'Employer Name': formData.employerName,
-      'Payment Method': formData.paymentMethod,
+      'Payment Method': formData.paymentMethod, // CAMBIÉ DE paymentMethod a paycheckMethod
       'Account Type': formData.accountType,
       'Routing Number': formData.routingNumber,
       'Account Number': formData.accountNumber

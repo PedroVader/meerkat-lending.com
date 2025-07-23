@@ -87,7 +87,7 @@ export default function Footer(): React.JSX.Element {
               © 2025 Meerkat Lending, LLC. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+              <a href="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Use</a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">CCPA Notice</a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Do Not Sell My Info</a>

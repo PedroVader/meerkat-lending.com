@@ -77,77 +77,136 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
       case 1: // LoanAmountStep
         result = formData.loanAmount !== '';
         break;
+        
       case 2: // EmailAddressStep
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         result = formData.email !== '' && emailRegex.test(formData.email);
         break;
+        
       case 3: // CreditScoreStep
         result = formData.creditScore !== '';
         break;
+        
       case 4: // LoanPurposeStep
         result = formData.loanPurpose !== '';
         break;
+        
       case 5: // YourNameStep
-        result = formData.firstName !== '' && formData.lastName !== '';
+        // Validar que solo contengan letras y espacios, mínimo 2 caracteres
+        const nameRegex = /^[a-zA-Z\s'-]{2,}$/;
+        result = formData.firstName !== '' && 
+                 formData.lastName !== '' &&
+                 nameRegex.test(formData.firstName) &&
+                 nameRegex.test(formData.lastName);
         break;
+        
       case 6: // CellPhoneNumberStep
-        result = formData.phone !== '';
+        // Validar que tenga 10 u 11 dígitos
+        const phoneDigits = formData.phone.replace(/\D/g, '');
+        result = phoneDigits.length === 10 || phoneDigits.length === 11;
         break;
+        
       case 7: // AddressStep
-        result = formData.zipCode !== '' && formData.address !== '';
+        // Validar ZIP code de 5 dígitos
+        const zipRegex = /^\d{5}$/;
+        result = formData.zipCode !== '' && 
+                 formData.address !== '' &&
+                 zipRegex.test(formData.zipCode) &&
+                 formData.address.length >= 5; // Mínimo 5 caracteres para dirección
         break;
+        
       case 8: // IncomeTypeStep
         result = formData.incomeType !== '';
         break;
-        case 9: { // DateBirthStep
-          const dob = formData.dateOfBirth;
-          if (!dob) {
-            result = false;
-            break;
-          }
         
-          const date = typeof dob === 'string' ? new Date(dob) : dob;
-          const now = new Date();
-          const age = now.getFullYear() - date.getFullYear();
-          const monthDiff = now.getMonth() - date.getMonth();
-          const dayDiff = now.getDate() - date.getDate();
-          const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
-        
-          result = actualAge >= 18;
+      case 9: { // DateBirthStep
+        const dob = formData.dateOfBirth;
+        if (!dob) {
+          result = false;
           break;
         }
+      
+        const date = typeof dob === 'string' ? new Date(dob) : dob;
+        const now = new Date();
+        const age = now.getFullYear() - date.getFullYear();
+        const monthDiff = now.getMonth() - date.getMonth();
+        const dayDiff = now.getDate() - date.getDate();
+        const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+      
+        result = actualAge >= 18 && actualAge <= 100; // Entre 18 y 100 años
+        break;
+      }
+      
       case 10: // MonthlyIncomeStep
         result = formData.monthlyIncome !== '';
         break;
+        
       case 11: // SSNStep
         const ssnDigits = formData.ssn.replace(/\D/g, '');
-        result = ssnDigits.length === 9;
+        // Validar 9 dígitos y que no sea todo ceros o números repetidos
+        const invalidSSN = /^000|^666|^9\d{2}|^\d{3}00|^\d{5}0000|^(\d)\1{8}$/;
+        result = ssnDigits.length === 9 && !invalidSSN.test(ssnDigits);
         break;
+        
       case 12: // HomeOwnerStep
         result = formData.homeOwner !== '';
         break;
+        
       case 13: // DriversLicenseStep
-        result = formData.driverLicense !== '' && formData.licenseState !== '';
+        // Validar que tenga al menos 5 caracteres y estado válido
+        result = formData.driverLicense !== '' && 
+                 formData.licenseState !== '' &&
+                 formData.driverLicense.length >= 5;
         break;
+        
       case 14: // PaymentScheduleStep
         result = formData.payFrequency !== '';
         break;
+        
       case 15: // NextPaydateStep
-        const date = formData.nextPayDate;
-        result = !!(date && !isNaN(new Date(date).getTime()));
+        const payDate = formData.nextPayDate;
+        if (!payDate) {
+          result = false;
+          break;
+        }
+        
+        const dateObj = typeof payDate === 'string' ? new Date(payDate) : payDate;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        // Debe ser fecha futura, no más de 60 días en el futuro
+        const maxDate = new Date();
+        maxDate.setDate(maxDate.getDate() + 60);
+        
+        result = dateObj >= today && dateObj <= maxDate;
         break;
+        
       case 16: // EmploymentStep
-        result = formData.employerName !== '';
+        // Mínimo 2 caracteres
+        result = formData.employerName !== '' && 
+                 formData.employerName.length >= 2;
         break;
+        
       case 17: // PaycheckMethodStep
         result = formData.paycheckMethod !== '';
         break;
+        
       case 18: // AccountTypeStep
         result = formData.accountType !== '';
         break;
+        
       case 19: // BankDetailsStep
-        result = formData.routingNumber !== '' && formData.accountNumber !== '';
+        // Routing number: 9 dígitos
+        // Account number: entre 4 y 17 dígitos
+        const routingRegex = /^\d{9}$/;
+        const accountRegex = /^\d{4,17}$/;
+        
+        result = formData.routingNumber !== '' && 
+                 formData.accountNumber !== '' &&
+                 routingRegex.test(formData.routingNumber) &&
+                 accountRegex.test(formData.accountNumber);
         break;
+        
       default:
         result = true;
     }
