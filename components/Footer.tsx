@@ -20,7 +20,6 @@ export default function Footer(): React.JSX.Element {
             </p>
             <div className="flex space-x-4">
               <Badge variant="secondary" className="bg-gray-800 text-gray-300">
-                <Shield className="h-3 w-3 mr-1" />
                 SSL 256-bit
               </Badge>
   
@@ -43,7 +42,6 @@ export default function Footer(): React.JSX.Element {
             <ul className="space-y-3 text-gray-400">
               <li><a href="/blog" className="hover:text-white transition-colors">Financial blog</a></li> {/* Enlace al blog */}
               <li><a href="#FAQ" className="hover:text-white transition-colors">FAQ</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Glossary</a></li>
             </ul>
           </div>
 

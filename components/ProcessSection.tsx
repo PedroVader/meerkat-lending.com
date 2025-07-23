@@ -66,7 +66,6 @@ export default function ProcessSection(): React.JSX.Element {
                         <span className="flex items-center text-emerald-600">
                           50+ lenders compete
                         </span>
-                        <span className="text-gray-500">• Real-time results</span>
                       </div>
                     </div>
                   </div>
@@ -89,7 +88,6 @@ export default function ProcessSection(): React.JSX.Element {
                         <span className="flex items-center text-emerald-600">
                           Side-by-side comparison
                         </span>
-                        <span className="text-gray-500">• Chat support available</span>
                       </div>
                     </div>
                   </div>
@@ -113,7 +111,6 @@ export default function ProcessSection(): React.JSX.Element {
                         <span className="flex items-center text-emerald-600">
                           Next-day typical
                         </span>
-                        <span className="text-gray-500">• SMS updates included</span>
                       </div>
                     </div>
                   </div>

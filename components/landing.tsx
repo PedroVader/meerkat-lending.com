@@ -19,7 +19,6 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white">
       <Header showForm={showForm} setShowForm={setShowForm} />
       <HeroSection showForm={showForm} setShowForm={setShowForm} />
-      <TrustBar />
       <UseCasesSection />
       <TestimonialsSection showForm={showForm} setShowForm={setShowForm} />
       <ProcessSection />

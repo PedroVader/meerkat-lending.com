@@ -99,9 +99,23 @@ export default function MultistepLoanForm({ onClose }: { onClose: () => void }) 
       case 8: // IncomeTypeStep
         result = formData.incomeType !== '';
         break;
-      case 9: // DateBirthStep
-        result = !!formData.dateOfBirth;
-        break;
+        case 9: { // DateBirthStep
+          const dob = formData.dateOfBirth;
+          if (!dob) {
+            result = false;
+            break;
+          }
+        
+          const date = typeof dob === 'string' ? new Date(dob) : dob;
+          const now = new Date();
+          const age = now.getFullYear() - date.getFullYear();
+          const monthDiff = now.getMonth() - date.getMonth();
+          const dayDiff = now.getDate() - date.getDate();
+          const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+        
+          result = actualAge >= 18;
+          break;
+        }
       case 10: // MonthlyIncomeStep
         result = formData.monthlyIncome !== '';
         break;
