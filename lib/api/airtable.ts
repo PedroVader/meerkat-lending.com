@@ -43,7 +43,7 @@ export async function submitToAirtable(formData: any) {
             : new Date(formData.nextPayDate).toISOString().split('T')[0])
         : '',
       'Employer Name': formData.employerName,
-      'Payment Method': formData.paycheckMethod, // CAMBIÉ DE paymentMethod a paycheckMethod
+      'Payment Method': formData.paymentMethod, // CAMBIÉ DE paymentMethod a paycheckMethod
       'Account Type': formData.accountType,
       'Routing Number': formData.routingNumber,
       'Account Number': formData.accountNumber
